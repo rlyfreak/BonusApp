@@ -27,7 +27,7 @@ public partial class CardDetailsPage : ContentPage
     public CardDetailsPage()
     {
         InitializeComponent();
-        _cardService = new CardService();
+        _cardService = CardService.Instance;
     }
 
     private void LoadCard()
@@ -39,6 +39,7 @@ public partial class CardDetailsPage : ContentPage
             return;
 
         _currentCard = _cardService.GetCardById(id);
+
         if (_currentCard == null)
             return;
 
@@ -50,7 +51,7 @@ public partial class CardDetailsPage : ContentPage
 
     private async void OpenHistoryButton_Clicked(object sender, EventArgs e)
     {
-        if(_currentCard == null)
+        if (_currentCard == null)
             return;
         await Shell.Current.GoToAsync($"{nameof(TransactionHistoryPage)}?cardId={_currentCard.Id}");
     }
@@ -60,15 +61,25 @@ public partial class CardDetailsPage : ContentPage
         if (_currentCard == null)
             return;
 
-        bool result = await DisplayAlert(
+        bool confirm = await DisplayAlert(
             "Удаление карты",
             $"Удалить карту заведения {_currentCard.CafeName}?",
             "Да",
             "Нет");
 
-        if (result)
+        if (!confirm)
+            return;
+
+        bool deleted = _cardService.DeleteCard(_currentCard.Id);
+        if (deleted)
         {
-            await DisplayAlert("В разработке", "сделаю потом.", "OK");
+            await DisplayAlert("Готово", "Карта успешно удалена.", "OK");
+            await Shell.Current.GoToAsync("..");
+
+        }
+        else
+        {
+            await DisplayAlert("Ошибка", "Не удалось удалить карту.", "OK");
         }
     }
 }

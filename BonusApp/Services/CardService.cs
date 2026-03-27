@@ -4,6 +4,9 @@ namespace BonusApp.Services;
 
 public class CardService
 {
+    private static readonly CardService _instance = new CardService();
+    public static CardService Instance => _instance;
+
     private readonly List<LoyaltyCard> _cards = new()
     {
      new LoyaltyCard
@@ -31,14 +34,23 @@ public class CardService
          QrCodeValue = "QR-CA-100003"
      }
     };
-
+    private CardService() { }
     public List<LoyaltyCard> GetCards()
     {
-        return _cards;
+        return _cards.ToList();
     }
 
     public LoyaltyCard? GetCardById(int id)
     {
         return _cards.FirstOrDefault(x => x.Id == id);
+    }
+
+    public bool DeleteCard(int id)
+    {
+        var card = _cards.FirstOrDefault(x => x.Id == id);
+        if (card == null)
+            return false;
+        _cards.Remove(card);
+        return true;
     }
 }
