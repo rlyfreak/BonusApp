@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="BonusApp.Views.CardDetailsPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    Title="Детали карты">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="16">
+
+            <Label
+                Text="Информация о карте"
+                FontSize="26"
+                FontAttributes="Bold" />
+
+            <Frame Padding="16">
+                <VerticalStackLayout Spacing="12">
+                    <Label
+                        x:Name="CafeNameLabel"
+                        Text="Название заведения"
+                        FontSize="22"
+                        FontAttributes="Bold" />
+
+                    <Label
+                        x:Name="CardNumberLabel"
+                        Text="Номер карты:"
+                        FontSize="16" />
+
+                    <Label
+                        x:Name="BonusBalanceLabel"
+                        Text="Баланс бонусов:"
+                        FontSize="16" />
+
+                    <Label
+                        x:Name="QrCodeValueLabel"
+                        Text="QR-код:"
+                        FontSize="16" />
+                </VerticalStackLayout>
+            </Frame>
+
+            <Button
+                Text="Открыть историю транзакций"
+                Clicked="OpenHistoryButton_Clicked" />
+
+            <Button
+                Text="Удалить карту"
+                Clicked="DeleteCardButton_Clicked" />
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="BonusApp.Views.CardsPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    Title="Мои карты">
+
+    <Grid RowDefinitions="Auto,*" Padding="20">
+        <VerticalStackLayout Spacing="6">
+            <Label
+                Text="Мои карты лояльности"
+                FontSize="26"
+                FontAttributes="Bold" />
+
+            <Label
+                Text="Список подключённых карт заведений"
+                FontSize="14"
+                Opacity="0.8" />
+        </VerticalStackLayout>
+
+        <CollectionView
+            x:Name="CardsCollectionView"
+            Grid.Row="1"
+            Margin="0,20,0,0"
+            SelectionMode="Single"
+            SelectionChanged="CardsCollectionView_SelectionChanged">
+
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Frame Margin="0,0,0,14" Padding="16">
+                        <VerticalStackLayout Spacing="8">
+                            <Label
+                                Text="{Binding CafeName}"
+                                FontSize="20"
+                                FontAttributes="Bold" />
+
+                            <Label
+                                Text="{Binding CardNumber, StringFormat='Номер карты: {0}'}"
+                                FontSize="14" />
+
+                            <Label
+                                Text="{Binding BonusBalance, StringFormat='Баланс бонусов: {0}'}"
+                                FontSize="16" />
+                        </VerticalStackLayout>
+                    </Frame>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </Grid>
+</ContentPage>
