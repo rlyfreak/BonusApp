@@ -1,5 +1,4 @@
 ﻿using BonusApp.Models;
-
 namespace BonusApp.Services;
 
 public class CardService
@@ -52,5 +51,43 @@ public class CardService
             return false;
         _cards.Remove(card);
         return true;
+    }
+    public bool HasCardForCafe(string cafeName)
+    {
+        return _cards.Any(x => x.CafeName == cafeName);
+    }
+    private int _nextId = 4;
+    public LoyaltyCard? AddCard(string cafename)
+    {
+        if (HasCardForCafe(cafename))
+            return null;
+        string prefix = GetPrefix(cafename);
+        string cardNumber = $"{prefix}-{_nextId:000000}";
+        string qrCode = $"QR-{cardNumber}";
+
+        var newCard = new LoyaltyCard
+        {
+            Id = _nextId,
+            CafeName = cafename,
+            CardNumber = cardNumber,
+            BonusBalance = 0,
+            QrCodeValue = qrCode
+        };
+        _cards.Add(newCard);
+        _nextId++;
+        return newCard;
+    }
+    private string GetPrefix(string cafeName)
+    {
+        return cafeName switch
+        {
+            "Калипсо" => "KO",
+            "Розмарин" => "RN",
+            "Чайка" => "CA",
+            "Мечтатели" => "MI",
+            "Сахара не надо" => "SO",
+            "Ательер" => "AR",
+            "Комод" => "KD",
+        };
     }
 }

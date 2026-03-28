@@ -18,6 +18,12 @@ public partial class CardsPage : ContentPage
         base.OnAppearing();
         CardsCollectionView.ItemsSource = _cardService.GetCards();
     }
+
+    private async void AddCardButton_Clicked(object sender, EventArgs e)
+    {
+        await Shell.Current.GoToAsync(nameof(AddCardPage));
+    }
+
     private async void CardsCollectionView_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
         if (e.CurrentSelection.FirstOrDefault() is LoyaltyCard selectedCard)

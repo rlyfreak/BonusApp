@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="BonusApp.Views.AddCardPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    Title="Добавить карту">
+
+    <Grid RowDefinitions="Auto,*" Padding="20">
+        <VerticalStackLayout Spacing="6">
+            <Label
+                Text="Выбор заведения"
+                FontSize="26"
+                FontAttributes="Bold" />
+
+            <Label
+                Text="Выберите заведение, для которого нужно оформить карту лояльности"
+                FontSize="14"
+                Opacity="0.8" />
+        </VerticalStackLayout>
+
+        <CollectionView
+            x:Name="CafesCollectionView"
+            Grid.Row="1"
+            Margin="0,20,0,0"
+            SelectionMode="Single"
+            SelectionChanged="CafesCollectionView_SelectionChanged">
+
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Frame Margin="0,0,0,14" Padding="16">
+                        <VerticalStackLayout Spacing="8">
+                            <Label
+                                Text="{Binding Name}"
+                                FontSize="20"
+                                FontAttributes="Bold" />
+
+                            <Label
+                                Text="Нажмите, чтобы выпустить карту"
+                                FontSize="14"
+                                Opacity="0.8" />
+                        </VerticalStackLayout>
+                    </Frame>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </Grid>
+</ContentPage>

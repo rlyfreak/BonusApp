@@ -5,23 +5,24 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     Title="Мои карты">
 
-    <Grid RowDefinitions="Auto,*" Padding="20">
-        <VerticalStackLayout Spacing="6">
-            <Label
-                Text="Мои карты лояльности"
-                FontSize="26"
-                FontAttributes="Bold" />
+    <VerticalStackLayout Padding="20" Spacing="16">
 
-            <Label
-                Text="Список подключённых карт заведений"
-                FontSize="14"
-                Opacity="0.8" />
-        </VerticalStackLayout>
+        <Label
+            Text="Мои бонусные карты"
+            FontSize="26"
+            FontAttributes="Bold" />
+
+        <Label
+            Text="Список подключённых карт заведений"
+            FontSize="14"
+            Opacity="0.8" />
+
+        <Button
+            Text="Добавить новую карту"
+            Clicked="AddCardButton_Clicked" />
 
         <CollectionView
             x:Name="CardsCollectionView"
-            Grid.Row="1"
-            Margin="0,20,0,0"
             SelectionMode="Single"
             SelectionChanged="CardsCollectionView_SelectionChanged">
 
@@ -35,16 +36,16 @@
                                 FontAttributes="Bold" />
 
                             <Label
-                                Text="{Binding CardNumber, StringFormat='Номер карты: {0}'}"
+                                Text="{Binding CardNumber}"
                                 FontSize="14" />
 
                             <Label
-                                Text="{Binding BonusBalance, StringFormat='Баланс бонусов: {0}'}"
+                                Text="{Binding BonusBalance}"
                                 FontSize="16" />
                         </VerticalStackLayout>
                     </Frame>
                 </DataTemplate>
             </CollectionView.ItemTemplate>
         </CollectionView>
-    </Grid>
+    </VerticalStackLayout>
 </ContentPage>
