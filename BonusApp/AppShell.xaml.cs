@@ -10,6 +10,7 @@ namespace BonusApp
             Routing.RegisterRoute(nameof(CardDetailsPage), typeof(CardDetailsPage));
             Routing.RegisterRoute(nameof(TransactionHistoryPage), typeof(TransactionHistoryPage));
             Routing.RegisterRoute(nameof(AddCardPage), typeof(AddCardPage));
+            Routing.RegisterRoute(nameof(NotificationsPage), typeof(NotificationsPage));
         }
     }
 }

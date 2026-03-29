@@ -32,6 +32,10 @@
                 x:Name="OpenCardsButton"
                 Text="Открыть список карт"
                 Clicked="OpenCardsButton_Clicked" />
+            <Button
+                x:Name="OpenNotificationsButton"
+                Text="Открыть уведомления"
+                Clicked="OpenNotificationsButton_Clicked" />
 
         </VerticalStackLayout>
     </ScrollView>

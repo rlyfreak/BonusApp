@@ -13,4 +13,8 @@ public partial class MainPage : ContentPage
     {
         await Shell.Current.GoToAsync(nameof(CardsPage));
     }
+    private async void OpenNotificationsButton_Clicked(object sender, EventArgs e)
+    {
+        await Shell.Current.GoToAsync(nameof(NotificationsPage));
+    }
 }

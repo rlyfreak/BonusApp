@@ -33,7 +33,12 @@ public class CardService
          QrCodeValue = "QR-CA-100003"
      }
     };
-    private CardService() { }
+    private int _nextId = 4;
+    private readonly NotificationService _notificationService;
+    private CardService() 
+    { 
+        _notificationService = NotificationService.Instance;
+    }
     public List<LoyaltyCard> GetCards()
     {
         return _cards.ToList();
@@ -49,14 +54,17 @@ public class CardService
         var card = _cards.FirstOrDefault(x => x.Id == id);
         if (card == null)
             return false;
+        string cafename = card.CafeName;
         _cards.Remove(card);
+        _notificationService.AddNotification(
+            "Удаление карты",
+            $"Бонусная карта заведения {cafename} была успешно удалена.");
         return true;
     }
     public bool HasCardForCafe(string cafeName)
     {
         return _cards.Any(x => x.CafeName == cafeName);
     }
-    private int _nextId = 4;
     public LoyaltyCard? AddCard(string cafename)
     {
         if (HasCardForCafe(cafename))
@@ -74,6 +82,9 @@ public class CardService
             QrCodeValue = qrCode
         };
         _cards.Add(newCard);
+        _notificationService.AddNotification(
+            "Создание карт",
+            $"Бонусная карта для заведения {cafename} была успешно создана.");
         _nextId++;
         return newCard;
     }
@@ -88,6 +99,7 @@ public class CardService
             "Сахара не надо" => "SO",
             "Ательер" => "AR",
             "Комод" => "KD",
+            _ => "XX"
         };
     }
 }
