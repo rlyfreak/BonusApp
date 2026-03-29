@@ -1,27 +1,23 @@
 ﻿using BonusApp.Models;
-using BonusApp.Services;
+using BonusApp.ViewModels;
 
 namespace BonusApp.Views;
 
 public partial class CardsPage : ContentPage
 {
-    private readonly CardService _cardService;
+    private readonly CardsViewModel _viewModel;
 
     public CardsPage()
     {
         InitializeComponent();
-        _cardService = CardService.Instance;
+        _viewModel = new CardsViewModel();
+        BindingContext = _viewModel;
     }
 
     protected override void OnAppearing()
     {
         base.OnAppearing();
-        CardsCollectionView.ItemsSource = _cardService.GetCards();
-    }
-
-    private async void AddCardButton_Clicked(object sender, EventArgs e)
-    {
-        await Shell.Current.GoToAsync(nameof(AddCardPage));
+        _viewModel.LoadCards();
     }
 
     private async void CardsCollectionView_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -29,7 +25,7 @@ public partial class CardsPage : ContentPage
         if (e.CurrentSelection.FirstOrDefault() is LoyaltyCard selectedCard)
         {
             CardsCollectionView.SelectedItem = null;
-            await Shell.Current.GoToAsync($"{nameof(CardDetailsPage)}?cardId={selectedCard.Id}");
+            await _viewModel.OpenCardDetailsAsync(selectedCard);
         }
     }
 }

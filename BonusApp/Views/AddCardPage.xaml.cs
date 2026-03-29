@@ -1,61 +1,68 @@
-﻿using BonusApp.Models;
-using BonusApp.Services;
+﻿using BonusApp.ViewModels;
 
 namespace BonusApp.Views;
 
 public partial class AddCardPage : ContentPage
 {
-    private readonly CafeService _cafeService;
-    private readonly CardService _cardService;
+    private readonly AddCardViewModel _viewModel;
 
     public AddCardPage()
     {
         InitializeComponent();
 
-        _cafeService = CafeService.Instance;
-        _cardService = CardService.Instance;
-
-        CafesCollectionView.ItemsSource = _cafeService.GetCafes();
+        _viewModel = new AddCardViewModel();
+        BindingContext = _viewModel;
     }
 
-    private async void CafesCollectionView_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    protected override void OnAppearing()
     {
-        if (e.CurrentSelection.FirstOrDefault() is not Cafe selectedCafe)
+        base.OnAppearing();
+        _viewModel.LoadCafes();
+    }
+
+    private async void CreateCardButton_Clicked(object sender, EventArgs e)
+    {
+        if (_viewModel.SelectedCafe == null)
+        {
+            await DisplayAlert("Ошибка", "Сначала выберите заведение.", "OK");
             return;
+        }
 
-        CafesCollectionView.SelectedItem = null;
-
-        if (_cardService.HasCardForCafe(selectedCafe.Name))
+        if (_viewModel.HasCardForSelectedCafe())
         {
             await DisplayAlert(
                 "Карта уже существует",
-                $"У вас уже есть карта заведения {selectedCafe.Name}.",
+                $"У вас уже есть карта заведения {_viewModel.SelectedCafe.Name}.",
                 "OK");
+
+            _viewModel.ClearSelection();
             return;
         }
 
         bool confirm = await DisplayAlert(
             "Создание карты",
-            $"Оформить карту лояльности для заведения {selectedCafe.Name}?",
+            $"Оформить бонусную карту для заведения {_viewModel.SelectedCafe.Name}?",
             "Да",
             "Нет");
 
         if (!confirm)
             return;
 
-        var createdCard = _cardService.AddCard(selectedCafe.Name);
+        bool created = _viewModel.CreateCardForSelectedCafe();
 
-        if (createdCard == null)
+        if (created)
+        {
+            await DisplayAlert(
+                "Готово",
+                $"Карта для заведения {_viewModel.SelectedCafe?.Name} успешно создана.",
+                "OK");
+
+            _viewModel.ClearSelection();
+            await Shell.Current.GoToAsync("..");
+        }
+        else
         {
             await DisplayAlert("Ошибка", "Не удалось создать карту.", "OK");
-            return;
         }
-
-        await DisplayAlert(
-            "Готово",
-            $"Карта для заведения {createdCard.CafeName} успешно создана.",
-            "OK");
-
-        await Shell.Current.GoToAsync("..");
     }
 }

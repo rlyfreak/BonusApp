@@ -19,10 +19,11 @@
 
         <Button
             Text="Добавить новую карту"
-            Clicked="AddCardButton_Clicked" />
+            Command="{Binding OpenAddCardPageCommand}" />
 
         <CollectionView
             x:Name="CardsCollectionView"
+            ItemsSource="{Binding Cards}"
             SelectionMode="Single"
             SelectionChanged="CardsCollectionView_SelectionChanged">
 
@@ -47,5 +48,6 @@
                 </DataTemplate>
             </CollectionView.ItemTemplate>
         </CollectionView>
+
     </VerticalStackLayout>
 </ContentPage>

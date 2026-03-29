@@ -5,47 +5,43 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     Title="Детали карты">
 
-    <ScrollView>
-        <VerticalStackLayout Padding="20" Spacing="16">
+	<ScrollView>
+		<VerticalStackLayout Padding="20" Spacing="16">
 
-            <Label
+			<Label
                 Text="Информация о карте"
                 FontSize="26"
                 FontAttributes="Bold" />
 
-            <Frame Padding="16">
-                <VerticalStackLayout Spacing="12">
-                    <Label
-                        x:Name="CafeNameLabel"
-                        Text="Название заведения"
+			<Frame Padding="16">
+				<VerticalStackLayout Spacing="12">
+					<Label
+                        Text="{Binding CafeName}"
                         FontSize="22"
                         FontAttributes="Bold" />
 
-                    <Label
-                        x:Name="CardNumberLabel"
-                        Text="Номер карты:"
+					<Label
+                        Text="{Binding CardNumberText}"
                         FontSize="16" />
 
-                    <Label
-                        x:Name="BonusBalanceLabel"
-                        Text="Баланс бонусов:"
+					<Label
+                        Text="{Binding BonusBalanceText}"
                         FontSize="16" />
 
-                    <Label
-                        x:Name="QrCodeValueLabel"
-                        Text="QR-код:"
+					<Label
+                        Text="{Binding QrCodeValueText}"
                         FontSize="16" />
-                </VerticalStackLayout>
-            </Frame>
+				</VerticalStackLayout>
+			</Frame>
 
-            <Button
+			<Button
                 Text="Открыть историю транзакций"
-                Clicked="OpenHistoryButton_Clicked" />
+                Command="{Binding OpenHistoryCommand}" />
 
-            <Button
+			<Button
                 Text="Удалить карту"
                 Clicked="DeleteCardButton_Clicked" />
 
-        </VerticalStackLayout>
-    </ScrollView>
+		</VerticalStackLayout>
+	</ScrollView>
 </ContentPage>

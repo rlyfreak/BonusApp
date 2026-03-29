@@ -1,39 +1,32 @@
-﻿using BonusApp.Services;
+﻿using BonusApp.ViewModels;
 
 namespace BonusApp.Views;
 
 [QueryProperty(nameof(CardId), "cardId")]
 public partial class TransactionHistoryPage : ContentPage
 {
-    private readonly TransactionService _transactionService;
-
+    private readonly TransactionHistoryViewModel _viewModel;
     private string _cardId = string.Empty;
+
     public string CardId
     {
         get => _cardId;
         set
         {
             _cardId = value;
-            LoadTransactions();
+
+            if (int.TryParse(value, out int id))
+            {
+                _viewModel.LoadTransactions(id);
+            }
         }
     }
 
     public TransactionHistoryPage()
     {
         InitializeComponent();
-        _transactionService = new TransactionService();
-    }
 
-    private void LoadTransactions()
-    {
-        if (string.IsNullOrWhiteSpace(_cardId))
-            return;
-
-        if (!int.TryParse(_cardId, out int id))
-            return;
-
-        var transactions = _transactionService.GetTransactionsByCardId(id);
-        TransactionsCollectionView.ItemsSource = transactions;
-        CardInfoLabel.Text = $"История операций по карте ID: {id}";
+        _viewModel = new TransactionHistoryViewModel();
+        BindingContext = _viewModel;
     }
 }

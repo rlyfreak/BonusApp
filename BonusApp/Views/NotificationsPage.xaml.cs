@@ -1,22 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using BonusApp.Services;
+﻿using BonusApp.ViewModels;
 
-namespace BonusApp.Views
+namespace BonusApp.Views;
+
+public partial class NotificationsPage : ContentPage
 {
-    public partial class NotificationsPage : ContentPage
+    private readonly NotificationsViewModel _viewModel;
+
+    public NotificationsPage()
     {
-        private readonly NotificationService _notificationService;
-        public NotificationsPage()
-        {
-            InitializeComponent();
-            _notificationService = NotificationService.Instance;
-        }
-        protected override void OnAppearing()
-        {
-            base.OnAppearing();
-            NotificationsCollectionView.ItemsSource = _notificationService.GetNotifications();
-        }
+        InitializeComponent();
+
+        _viewModel = new NotificationsViewModel();
+        BindingContext = _viewModel;
+    }
+
+    protected override void OnAppearing()
+    {
+        base.OnAppearing();
+        _viewModel.LoadNotifications();
     }
 }

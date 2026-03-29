@@ -5,43 +5,49 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     Title="Добавить карту">
 
-    <Grid RowDefinitions="Auto,*" Padding="20">
-        <VerticalStackLayout Spacing="6">
-            <Label
+	<Grid RowDefinitions="Auto,*,Auto" Padding="20">
+		<VerticalStackLayout Spacing="6">
+			<Label
                 Text="Выбор заведения"
                 FontSize="26"
                 FontAttributes="Bold" />
 
-            <Label
-                Text="Выберите заведение, для которого нужно оформить карту лояльности"
+			<Label
+                Text="Выберите заведение, для которого нужно оформить бонусную карту"
                 FontSize="14"
                 Opacity="0.8" />
-        </VerticalStackLayout>
+		</VerticalStackLayout>
 
-        <CollectionView
-            x:Name="CafesCollectionView"
+		<CollectionView
             Grid.Row="1"
             Margin="0,20,0,0"
+            ItemsSource="{Binding Cafes}"
             SelectionMode="Single"
-            SelectionChanged="CafesCollectionView_SelectionChanged">
+            SelectedItem="{Binding SelectedCafe, Mode=TwoWay}">
 
-            <CollectionView.ItemTemplate>
-                <DataTemplate>
-                    <Frame Margin="0,0,0,14" Padding="16">
-                        <VerticalStackLayout Spacing="8">
-                            <Label
+			<CollectionView.ItemTemplate>
+				<DataTemplate>
+					<Frame Margin="0,0,0,14" Padding="16">
+						<VerticalStackLayout Spacing="8">
+							<Label
                                 Text="{Binding Name}"
                                 FontSize="20"
                                 FontAttributes="Bold" />
 
-                            <Label
-                                Text="Нажмите, чтобы выпустить карту"
+							<Label
+                                Text="Нажмите, чтобы выбрать заведение"
                                 FontSize="14"
                                 Opacity="0.8" />
-                        </VerticalStackLayout>
-                    </Frame>
-                </DataTemplate>
-            </CollectionView.ItemTemplate>
-        </CollectionView>
-    </Grid>
+						</VerticalStackLayout>
+					</Frame>
+				</DataTemplate>
+			</CollectionView.ItemTemplate>
+		</CollectionView>
+
+		<Button
+            Grid.Row="2"
+            Margin="0,20,0,0"
+            Text="Оформить карту"
+            Clicked="CreateCardButton_Clicked" />
+	</Grid>
 </ContentPage>
