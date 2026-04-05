@@ -24,13 +24,13 @@ public partial class AddCardPage : ContentPage
     {
         if (_viewModel.SelectedCafe == null)
         {
-            await DisplayAlert("Ошибка", "Сначала выберите заведение.", "OK");
+            await DisplayAlertAsync("Ошибка", "Сначала выберите заведение.", "OK");
             return;
         }
 
         if (_viewModel.HasCardForSelectedCafe())
         {
-            await DisplayAlert(
+            await DisplayAlertAsync(
                 "Карта уже существует",
                 $"У вас уже есть карта заведения {_viewModel.SelectedCafe.Name}.",
                 "OK");
@@ -39,7 +39,7 @@ public partial class AddCardPage : ContentPage
             return;
         }
 
-        bool confirm = await DisplayAlert(
+        bool confirm = await DisplayAlertAsync(
             "Создание карты",
             $"Оформить бонусную карту для заведения {_viewModel.SelectedCafe.Name}?",
             "Да",
@@ -52,7 +52,7 @@ public partial class AddCardPage : ContentPage
 
         if (created)
         {
-            await DisplayAlert(
+            await DisplayAlertAsync(
                 "Готово",
                 $"Карта для заведения {_viewModel.SelectedCafe?.Name} успешно создана.",
                 "OK");
@@ -62,7 +62,7 @@ public partial class AddCardPage : ContentPage
         }
         else
         {
-            await DisplayAlert("Ошибка", "Не удалось создать карту.", "OK");
+            await DisplayAlertAsync("Ошибка", "Не удалось создать карту.", "OK");
         }
     }
 }

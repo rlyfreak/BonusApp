@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<toolkit:Popup
+    x:Class="BonusApp.Views.Popups.CardDetailsPopup"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    CanBeDismissedByTappingOutsideOfPopup="True"
+    HorizontalOptions="Fill"
+    VerticalOptions="Fill"
+    Padding="0"
+    Margin="0"
+    BackgroundColor="Transparent">
+
+	<Grid RowDefinitions="56,*" BackgroundColor="Transparent" HorizontalOptions="Fill" VerticalOptions="Fill">
+
+		<!-- Верхняя свободная зона -->
+		<Grid Grid.Row="0" BackgroundColor="Transparent" />
+
+		<!-- Сам лист -->
+		<Border
+            x:Name="SheetContainer"
+            Grid.Row="1"
+			HorizontalOptions="Fill"
+			VerticalOptions="Fill"
+			Margin="0"
+			Padding="20,14,20,28"
+            Background="#5A627A"
+            StrokeThickness="0"
+            StrokeShape="RoundRectangle 28,28,0,0"
+            TranslationY="900">
+
+			<ScrollView>
+				<VerticalStackLayout Spacing="16">
+
+					<Grid ColumnDefinitions="Auto,*,Auto">
+						<Button
+                            Text="←"
+                            Clicked="CloseButton_Clicked"
+                            BackgroundColor="Transparent"
+                            TextColor="White"
+                            FontSize="22"
+                            Padding="0"
+                            WidthRequest="36"
+                            HeightRequest="36" />
+
+						<Label
+                            Grid.Column="1"
+                            Text="{Binding CafeName}"
+                            HorizontalOptions="Center"
+                            VerticalOptions="Center"
+                            FontSize="22"
+                            FontAttributes="Bold"
+                            TextColor="White" />
+
+						<BoxView Grid.Column="2" WidthRequest="36" />
+					</Grid>
+
+					<Frame
+                        Padding="18"
+                        CornerRadius="22"
+                        BackgroundColor="White"
+                        HasShadow="False">
+
+						<VerticalStackLayout Spacing="14">
+							<Frame
+                                WidthRequest="58"
+                                HeightRequest="58"
+                                CornerRadius="29"
+                                Padding="0"
+                                BackgroundColor="#EEF2F8"
+                                HasShadow="False"
+                                HorizontalOptions="Center">
+
+								<Label
+                                    Text="◌"
+                                    HorizontalOptions="Center"
+                                    VerticalOptions="Center"
+                                    FontSize="26"
+                                    TextColor="#8BA071" />
+							</Frame>
+						</VerticalStackLayout>
+					</Frame>
+
+					<VerticalStackLayout Spacing="2" HorizontalOptions="Center">
+						<Label
+                            Text="{Binding BonusValue}"
+                            FontSize="44"
+                            FontAttributes="Bold"
+                            TextColor="White"
+                            HorizontalTextAlignment="Center" />
+
+						<Label
+                            Text="бонусов"
+                            FontSize="16"
+                            TextColor="#D5DBE8"
+                            HorizontalTextAlignment="Center" />
+					</VerticalStackLayout>
+
+					<Frame
+                        Padding="18"
+                        CornerRadius="22"
+                        BackgroundColor="White"
+                        HasShadow="False">
+
+						<VerticalStackLayout Spacing="12">
+							<Grid
+                                WidthRequest="220"
+                                HeightRequest="220"
+                                HorizontalOptions="Center"
+                                BackgroundColor="White">
+
+								<!-- пока заглушка под QR -->
+								<Frame
+                                    Padding="0"
+                                    CornerRadius="0"
+                                    BorderColor="#D6DBE5"
+                                    BackgroundColor="White"
+                                    HasShadow="False">
+
+									<Grid RowDefinitions="*,*" ColumnDefinitions="*,*">
+										<BoxView Margin="12" Color="Black" />
+										<BoxView Grid.Column="1" Margin="12" Color="White" />
+										<BoxView Grid.Row="1" Margin="12" Color="White" />
+										<BoxView Grid.Row="1" Grid.Column="1" Margin="12" Color="Black" />
+									</Grid>
+								</Frame>
+							</Grid>
+
+							<Label
+                                Text="Подробности"
+                                FontSize="14"
+                                TextColor="#6C7488" />
+
+							<Frame
+                                Padding="14,12"
+                                CornerRadius="14"
+                                BackgroundColor="#3F465B"
+                                HasShadow="False">
+
+								<Grid ColumnDefinitions="*,Auto">
+									<Label
+                                        Text="Номер карты"
+                                        FontSize="15"
+                                        TextColor="#D7DDEA" />
+
+									<Label
+                                        Grid.Column="1"
+                                        Text="{Binding CardNumberValue}"
+                                        FontSize="15"
+                                        FontAttributes="Bold"
+                                        TextColor="White" />
+								</Grid>
+							</Frame>
+
+							<Button
+                                Text="Условия"
+                                Clicked="ConditionsButton_Clicked"
+                                BackgroundColor="#3F465B"
+                                TextColor="White"
+                                FontAttributes="Bold"
+                                FontSize="15"
+                                CornerRadius="14"
+                                HeightRequest="50" />
+
+							<Button
+                                Text="Контакты"
+                                Clicked="ContactsButton_Clicked"
+                                BackgroundColor="#3F465B"
+                                TextColor="White"
+                                FontAttributes="Bold"
+                                FontSize="15"
+                                CornerRadius="14"
+                                HeightRequest="50" />
+						</VerticalStackLayout>
+					</Frame>
+
+					<Button
+                        Text="Удалить карту"
+                        Clicked="DeleteCardButton_Clicked"
+                        BackgroundColor="#FF1E1E"
+                        TextColor="White"
+                        FontAttributes="Bold"
+                        FontSize="16"
+                        CornerRadius="16"
+                        HeightRequest="54" />
+
+				</VerticalStackLayout>
+			</ScrollView>
+		</Border>
+	</Grid>
+</toolkit:Popup>

@@ -1,16 +1,15 @@
 ﻿using BonusApp.Views;
-namespace BonusApp
+
+namespace BonusApp;
+
+public partial class AppShell : Shell
 {
-    public partial class AppShell : Shell
+    public AppShell()
     {
-        public AppShell()
-        {
-            InitializeComponent();
-            Routing.RegisterRoute(nameof(CardsPage), typeof(CardsPage));
-            Routing.RegisterRoute(nameof(CardDetailsPage), typeof(CardDetailsPage));
-            Routing.RegisterRoute(nameof(TransactionHistoryPage), typeof(TransactionHistoryPage));
-            Routing.RegisterRoute(nameof(AddCardPage), typeof(AddCardPage));
-            Routing.RegisterRoute(nameof(NotificationsPage), typeof(NotificationsPage));
-        }
+        InitializeComponent();
+
+        Routing.RegisterRoute(nameof(AddCardPage), typeof(AddCardPage));
+        Routing.RegisterRoute(nameof(NotificationsPage), typeof(NotificationsPage));
+        Routing.RegisterRoute(nameof(TransactionHistoryPage), typeof(TransactionHistoryPage));
     }
 }

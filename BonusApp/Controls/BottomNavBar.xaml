@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView
+    x:Class="BonusApp.Controls.BottomNavBar"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    HeightRequest="92">
+
+	<Border
+        Stroke="#1CFFFFFF"
+        StrokeThickness="1"
+        Padding="18,10,18,12"
+        HeightRequest="92"
+        StrokeShape="RoundRectangle 29"
+        VerticalOptions="End">
+
+		<Border.Background>
+			<LinearGradientBrush StartPoint="0,0.5" EndPoint="1,0.5">
+				<GradientStop Color="#3A404F" Offset="0.0" />
+				<GradientStop Color="#5F6982" Offset="0.5" />
+				<GradientStop Color="#3A404F" Offset="1.0" />
+			</LinearGradientBrush>
+		</Border.Background>
+
+		<Grid
+            ColumnDefinitions="*,*,*,*"
+            VerticalOptions="Center"
+            HorizontalOptions="Fill">
+
+			<!-- Главная -->
+			<Grid
+                Grid.Column="0"
+                RowDefinitions="Auto,Auto"
+                RowSpacing="6"
+                VerticalOptions="Center"
+                HorizontalOptions="Center">
+
+				<Grid.GestureRecognizers>
+					<TapGestureRecognizer Tapped="CardsTapped" />
+				</Grid.GestureRecognizers>
+
+				<Image
+                    x:Name="CardsIcon"
+                    Source="nav_cards.svg"
+                    WidthRequest="27"
+                    HeightRequest="27"
+                    HorizontalOptions="Center"
+                    VerticalOptions="Center" />
+
+				<Label
+                    x:Name="CardsLabel"
+                    Grid.Row="1"
+                    Text="Главная"
+                    HorizontalTextAlignment="Center"
+                    VerticalTextAlignment="Center"
+                    HorizontalOptions="Center" />
+			</Grid>
+
+			<!-- История -->
+			<Grid
+                Grid.Column="1"
+                RowDefinitions="Auto,Auto"
+                RowSpacing="6"
+                VerticalOptions="Center"
+                HorizontalOptions="Center">
+
+				<Grid.GestureRecognizers>
+					<TapGestureRecognizer Tapped="HistoryTapped" />
+				</Grid.GestureRecognizers>
+
+				<Image
+                    x:Name="HistoryIcon"
+                    Source="nav_history.svg"
+                    WidthRequest="27"
+                    HeightRequest="27"
+                    HorizontalOptions="Center"
+                    VerticalOptions="Center" />
+
+				<Label
+                    x:Name="HistoryLabel"
+                    Grid.Row="1"
+                    Text="История"
+                    HorizontalTextAlignment="Center"
+                    VerticalTextAlignment="Center"
+                    HorizontalOptions="Center" />
+			</Grid>
+
+			<!-- Каталог -->
+			<Grid
+                Grid.Column="2"
+                RowDefinitions="Auto,Auto"
+                RowSpacing="6"
+                VerticalOptions="Center"
+                HorizontalOptions="Center">
+
+				<Grid.GestureRecognizers>
+					<TapGestureRecognizer Tapped="CatalogTapped" />
+				</Grid.GestureRecognizers>
+
+				<Image
+                    x:Name="CatalogIcon"
+                    Source="nav_catalog.svg"
+                    WidthRequest="27"
+                    HeightRequest="27"
+                    HorizontalOptions="Center"
+                    VerticalOptions="Center" />
+
+				<Label
+                    x:Name="CatalogLabel"
+                    Grid.Row="1"
+                    Text="Каталог"
+                    HorizontalTextAlignment="Center"
+                    VerticalTextAlignment="Center"
+                    HorizontalOptions="Center" />
+			</Grid>
+
+			<!-- Профиль -->
+			<Grid
+                Grid.Column="3"
+                RowDefinitions="Auto,Auto"
+                RowSpacing="6"
+                VerticalOptions="Center"
+                HorizontalOptions="Center">
+
+				<Grid.GestureRecognizers>
+					<TapGestureRecognizer Tapped="ProfileTapped" />
+				</Grid.GestureRecognizers>
+
+				<Image
+                    x:Name="ProfileIcon"
+                    Source="nav_profile.svg"
+                    WidthRequest="27"
+                    HeightRequest="27"
+                    HorizontalOptions="Center"
+                    VerticalOptions="Center" />
+
+				<Label
+                    x:Name="ProfileLabel"
+                    Grid.Row="1"
+                    Text="Профиль"
+                    HorizontalTextAlignment="Center"
+                    VerticalTextAlignment="Center"
+                    HorizontalOptions="Center" />
+			</Grid>
+
+		</Grid>
+	</Border>
+</ContentView>

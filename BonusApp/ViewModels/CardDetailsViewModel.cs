@@ -23,25 +23,25 @@ public class CardDetailsViewModel : BaseViewModel
         set => SetProperty(ref _cafeName, value);
     }
 
-    private string _cardNumberText = "Номер карты:";
-    public string CardNumberText
+    private string _bonusValue = "0";
+    public string BonusValue
     {
-        get => _cardNumberText;
-        set => SetProperty(ref _cardNumberText, value);
+        get => _bonusValue;
+        set => SetProperty(ref _bonusValue, value);
     }
 
-    private string _bonusBalanceText = "Баланс бонусов:";
-    public string BonusBalanceText
+    private string _cardNumberValue = "-";
+    public string CardNumberValue
     {
-        get => _bonusBalanceText;
-        set => SetProperty(ref _bonusBalanceText, value);
+        get => _cardNumberValue;
+        set => SetProperty(ref _cardNumberValue, value);
     }
 
-    private string _qrCodeValueText = "QR-код:";
-    public string QrCodeValueText
+    private string _qrCodeValue = "-";
+    public string QrCodeValue
     {
-        get => _qrCodeValueText;
-        set => SetProperty(ref _qrCodeValueText, value);
+        get => _qrCodeValue;
+        set => SetProperty(ref _qrCodeValue, value);
     }
 
     public ICommand OpenHistoryCommand { get; }
@@ -67,9 +67,9 @@ public class CardDetailsViewModel : BaseViewModel
             return;
 
         CafeName = CurrentCard.CafeName;
-        CardNumberText = $"Номер карты: {CurrentCard.CardNumber}";
-        BonusBalanceText = $"Баланс бонусов: {CurrentCard.BonusBalance}";
-        QrCodeValueText = $"QR-код: {CurrentCard.QrCodeValue}";
+        BonusValue = CurrentCard.BonusBalance.ToString("0");
+        CardNumberValue = CurrentCard.CardNumber;
+        QrCodeValue = CurrentCard.QrCodeValue;
     }
 
     public bool DeleteCurrentCard()

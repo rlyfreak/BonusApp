@@ -3,10 +3,24 @@
     x:Class="BonusApp.AppShell"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:local="clr-namespace:BonusApp"
-    Title="BonusApp">
+    xmlns:views="clr-namespace:BonusApp.Views"
+    FlyoutBehavior="Disabled">
 
-    <ShellContent
-        Title="Главная"
-        ContentTemplate="{DataTemplate local:MainPage}" />
+    <TabBar>
+        <ShellContent
+            Route="CardsPage"
+            ContentTemplate="{DataTemplate views:CardsPage}" />
+
+        <ShellContent
+            Route="HistoryPage"
+            ContentTemplate="{DataTemplate views:HistoryPage}" />
+
+        <ShellContent
+            Route="CatalogPage"
+            ContentTemplate="{DataTemplate views:CatalogPage}" />
+
+        <ShellContent
+            Route="ProfilePage"
+            ContentTemplate="{DataTemplate views:ProfilePage}" />
+    </TabBar>
 </Shell>
