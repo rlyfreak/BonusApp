@@ -8,19 +8,194 @@
     Shell.TabBarIsVisible="False"
     BackgroundColor="#5E6883">
 
-	<Grid BackgroundColor="#5E6883">
+    <ContentPage.Resources>
+        <LinearGradientBrush x:Key="HistoryBackgroundBrush" StartPoint="0,0" EndPoint="0,1">
+            <GradientStop Color="#40475D" Offset="0.0" />
+            <GradientStop Color="#5E6883" Offset="1.0" />
+        </LinearGradientBrush>
+    </ContentPage.Resources>
 
-		<Label
-            Text="История"
-            TextColor="White"
-            FontFamily="RubikMedium"
-            FontSize="28"
-            HorizontalOptions="Center"
-            VerticalOptions="Center" />
+    <Grid Background="{StaticResource HistoryBackgroundBrush}">
 
-		<controls:BottomNavBar
+        <!-- Основной контент -->
+        <Grid Margin="0,0,0,110" RowDefinitions="Auto,Auto,Auto,*">
+
+            <!-- Заголовок -->
+            <Grid
+                Grid.Row="0"
+                Padding="20,18,20,12"
+                ColumnDefinitions="*">
+
+                <Label
+                    Text="История"
+                    FontSize="28"
+                    FontAttributes="Bold"
+                    TextColor="White"
+                    VerticalOptions="Center" />
+            </Grid>
+
+            <!-- Поиск -->
+            <Border
+                Grid.Row="1"
+                Margin="20,0,20,12"
+                Padding="0"
+                Background="#2F3648"
+                StrokeThickness="0"
+                StrokeShape="RoundRectangle 14">
+
+                <Grid ColumnDefinitions="Auto,*" Padding="14,8">
+                    <Label
+                        Text="⌕"
+                        FontSize="18"
+                        TextColor="#AEB6C9"
+                        VerticalOptions="Center" />
+
+                    <Entry
+                        Grid.Column="1"
+                        Text="{Binding SearchText}"
+                        Placeholder="Найти карту"
+                        PlaceholderColor="#AEB6C9"
+                        TextColor="White"
+                        BackgroundColor="Transparent"
+                        FontSize="15"
+                        Margin="10,0,0,0" />
+                </Grid>
+            </Border>
+
+            <!-- Фильтры -->
+            <HorizontalStackLayout
+                Grid.Row="2"
+                Margin="20,0,20,12"
+                Spacing="8">
+
+                <Button
+                    Text="Все"
+                    Command="{Binding ShowAllCommand}"
+                    BackgroundColor="{Binding AllBackground}"
+                    TextColor="{Binding AllTextColor}"
+                    CornerRadius="14"
+                    HeightRequest="34"
+                    FontFamily="RubikMedium"
+                    FontSize="14"
+                    Padding="14,4" />
+
+                <Button
+                    Text="Начисления"
+                    Command="{Binding ShowAccrualCommand}"
+                    BackgroundColor="{Binding AccrualBackground}"
+                    TextColor="{Binding AccrualTextColor}"
+                    CornerRadius="14"
+                    HeightRequest="34"
+                    FontFamily="RubikMedium"
+                    FontSize="14"
+                    Padding="14,4" />
+
+                <Button
+                    Text="Списания"
+                    Command="{Binding ShowWriteOffCommand}"
+                    BackgroundColor="{Binding WriteOffBackground}"
+                    TextColor="{Binding WriteOffTextColor}"
+                    CornerRadius="14"
+                    HeightRequest="34"
+                    FontFamily="RubikMedium"
+                    FontSize="14"
+                    Padding="14,4" />
+            </HorizontalStackLayout>
+
+            <!-- Список истории -->
+            <Grid Grid.Row="3">
+
+                <CollectionView
+                    Margin="20,0,20,0"
+                    IsGrouped="True"
+                    ItemsSource="{Binding Groups}"
+                    IsVisible="{Binding HasHistory}">
+
+                    <CollectionView.GroupHeaderTemplate>
+                        <DataTemplate>
+                            <Label
+                                Text="{Binding Title}"
+                                TextColor="White"
+                                FontSize="18"
+                                FontAttributes="Bold"
+                                Margin="0,8,0,10" />
+                        </DataTemplate>
+                    </CollectionView.GroupHeaderTemplate>
+
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Border
+                                Margin="0,0,0,12"
+                                Padding="14"
+                                Background="White"
+                                StrokeThickness="0"
+                                StrokeShape="RoundRectangle 18">
+
+                                <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto">
+
+                                    <Label
+                                        Text="{Binding CafeName}"
+                                        FontSize="18"
+                                        FontAttributes="Bold"
+                                        TextColor="#1F2430" />
+
+                                    <Label
+                                        Grid.Column="1"
+                                        Text="{Binding SignedAmount}"
+                                        FontSize="22"
+                                        FontAttributes="Bold"
+                                        TextColor="{Binding AmountColorHex}" />
+
+                                    <Label
+                                        Grid.Row="1"
+                                        Text="{Binding Description}"
+                                        FontSize="13"
+                                        TextColor="#6C7488"
+                                        Margin="0,6,0,0" />
+
+                                    <Label
+                                        Grid.Row="1"
+                                        Grid.Column="1"
+                                        Text="{Binding TimeText}"
+                                        FontSize="12"
+                                        TextColor="#6C7488"
+                                        Margin="0,8,0,0"
+                                        HorizontalTextAlignment="End" />
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+
+                <!-- Пустое состояние -->
+                <VerticalStackLayout
+                    Margin="20,0,20,0"
+                    IsVisible="{Binding IsHistoryEmpty}"
+                    HorizontalOptions="Center"
+                    VerticalOptions="Center"
+                    Spacing="12">
+
+                    <Label
+                        Text="Пока ничего нет"
+                        FontSize="22"
+                        FontAttributes="Bold"
+                        TextColor="White"
+                        HorizontalTextAlignment="Center" />
+
+                    <Label
+                        Text="Здесь будут находиться ваши будущие транзакции"
+                        FontSize="14"
+                        TextColor="#D7DDEA"
+                        HorizontalTextAlignment="Center"
+                        MaximumWidthRequest="260" />
+                </VerticalStackLayout>
+            </Grid>
+        </Grid>
+
+        <!-- Нижняя навигация -->
+        <controls:BottomNavBar
             Margin="16,0,16,12"
             VerticalOptions="End"
             CurrentTab="History" />
-	</Grid>
+    </Grid>
 </ContentPage>

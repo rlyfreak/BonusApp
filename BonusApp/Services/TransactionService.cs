@@ -12,8 +12,7 @@ public class TransactionService
             CardId = 1,
             Type = "Начисление",
             BonusAmount = 50,
-            Date = DateTime.Now.AddDays(-3),
-            Description = "Покупка: Капучино 0,3"
+            Date = DateTime.Now.AddHours(-2),
         },
         new TransactionItem
         {
@@ -21,8 +20,7 @@ public class TransactionService
             CardId = 1,
             Type = "Списание",
             BonusAmount = 20,
-            Date = DateTime.Now.AddDays(-2),
-            Description = "Оплата бонусами"
+            Date = DateTime.Now.AddHours(-5),
         },
         new TransactionItem
         {
@@ -30,8 +28,7 @@ public class TransactionService
             CardId = 2,
             Type = "Начисление",
             BonusAmount = 35,
-            Date = DateTime.Now.AddDays(-4),
-            Description = "Покупка: Латте 0,5"
+            Date = DateTime.Now.AddDays(-1).AddHours(-3),
         },
         new TransactionItem
         {
@@ -39,8 +36,7 @@ public class TransactionService
             CardId = 3,
             Type = "Начисление",
             BonusAmount = 100,
-            Date = DateTime.Now.AddDays(-1),
-            Description = "Покупка: Флет Уайт 0,3"
+            Date = DateTime.Now.AddDays(-3),
         },
         new TransactionItem
         {
@@ -48,10 +44,16 @@ public class TransactionService
             CardId = 3,
             Type = "Списание",
             BonusAmount = 40,
-            Date = DateTime.Now,
-            Description = "Скидка бонусами"
+            Date = DateTime.Now.AddDays(-5),
         }
     };
+
+    public List<TransactionItem> GetAllTransactions()
+    {
+        return _transactions
+            .OrderByDescending(x => x.Date)
+            .ToList();
+    }
 
     public List<TransactionItem> GetTransactionsByCardId(int cardId)
     {
