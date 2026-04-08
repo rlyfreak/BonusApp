@@ -8,19 +8,221 @@
     Shell.TabBarIsVisible="False"
     BackgroundColor="#5E6883">
 
-	<Grid BackgroundColor="#5E6883">
+    <ContentPage.Resources>
+        <LinearGradientBrush x:Key="ProfileBackgroundBrush" StartPoint="0,0" EndPoint="0,1">
+            <GradientStop Color="#40475D" Offset="0.0" />
+            <GradientStop Color="#5E6883" Offset="1.0" />
+        </LinearGradientBrush>
+    </ContentPage.Resources>
 
-		<Label
-            Text="Профиль"
-            TextColor="White"
-            FontFamily="RubikMedium"
-            FontSize="28"
-            HorizontalOptions="Center"
-            VerticalOptions="Center" />
+    <Grid Background="{StaticResource ProfileBackgroundBrush}">
 
-		<controls:BottomNavBar
+        <!-- Основной контент -->
+        <ScrollView Margin="0,0,0,110">
+            <VerticalStackLayout Padding="20,18,20,20" Spacing="16">
+
+                <!-- Заголовок -->
+                <Label
+                    Text="Профиль"
+                    FontSize="28"
+                    FontAttributes="Bold"
+                    TextColor="White" />
+
+                <!-- Верхняя карточка -->
+                <Border
+                    Padding="18"
+                    Background="White"
+                    StrokeThickness="0"
+                    StrokeShape="RoundRectangle 22">
+
+                    <HorizontalStackLayout Spacing="14" VerticalOptions="Center">
+
+                        <Border
+                            WidthRequest="64"
+                            HeightRequest="64"
+                            Background="#EEF2F8"
+                            StrokeThickness="0"
+                            StrokeShape="RoundRectangle 32"
+                            VerticalOptions="Center">
+
+                            <Label
+                                Text="👤"
+                                HorizontalOptions="Center"
+                                VerticalOptions="Center"
+                                FontSize="28" />
+                        </Border>
+
+                        <VerticalStackLayout Spacing="4" VerticalOptions="Center">
+                            <Label
+                                Text="{Binding FullName}"
+                                FontSize="18"
+                                FontFamily="RubikMedium"
+                                TextColor="#1F2430"
+                                LineBreakMode="WordWrap" />
+
+                            <Label
+                                Text="Пользователь приложения"
+                                FontSize="13"
+                                TextColor="#6C7488" />
+                        </VerticalStackLayout>
+
+                    </HorizontalStackLayout>
+                </Border>
+
+                <!-- Контакты -->
+                <Label
+                    Text="Контактные данные"
+                    FontSize="18"
+                    FontFamily="RubikMedium"
+                    TextColor="White" />
+
+                <Border
+                    Padding="0"
+                    Background="#303645"
+                    StrokeThickness="0"
+                    StrokeShape="RoundRectangle 18">
+
+                    <VerticalStackLayout Spacing="0">
+
+                        <Grid Padding="16,14" ColumnDefinitions="*,Auto">
+                            <VerticalStackLayout Spacing="4">
+                                <Label
+                                    Text="Номер телефона"
+                                    FontSize="14"
+                                    TextColor="#CCF3F6F9" />
+                                <Label
+                                    Text="{Binding PhoneNumber}"
+                                    FontSize="17"
+                                    TextColor="White"
+                                    FontFamily="RubikMedium" />
+                            </VerticalStackLayout>
+
+                            <Label
+                                Grid.Column="1"
+                                Text="›"
+                                FontSize="24"
+                                TextColor="#CCF3F6F9"
+                                VerticalOptions="Center" />
+                        </Grid>
+
+                        <BoxView HeightRequest="1" Color="#33F3F6F9" />
+
+                        <Grid Padding="16,14" ColumnDefinitions="*,Auto">
+                            <VerticalStackLayout Spacing="4">
+                                <Label
+                                    Text="Электронная почта"
+                                    FontSize="14"
+                                    TextColor="#CCF3F6F9" />
+                                <Label
+                                    Text="{Binding Email}"
+                                    FontSize="17"
+                                    TextColor="White"
+                                    FontFamily="RubikMedium" />
+                            </VerticalStackLayout>
+
+                            <Label
+                                Grid.Column="1"
+                                Text="›"
+                                FontSize="24"
+                                TextColor="#CCF3F6F9"
+                                VerticalOptions="Center" />
+                        </Grid>
+
+                    </VerticalStackLayout>
+
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="ContactsSectionTapped" />
+                    </Border.GestureRecognizers>
+                </Border>
+
+                <!-- Персональные данные -->
+                <Label
+                    Text="Персональные данные"
+                    FontSize="18"
+                    FontFamily="RubikMedium"
+                    TextColor="White" />
+
+                <Border
+                    Padding="0"
+                    Background="#303645"
+                    StrokeThickness="0"
+                    StrokeShape="RoundRectangle 18">
+
+                    <VerticalStackLayout Spacing="0">
+
+                        <Grid Padding="16,14" ColumnDefinitions="*,Auto">
+                            <VerticalStackLayout Spacing="4">
+                                <Label
+                                    Text="Фамилия Имя Отчество"
+                                    FontSize="14"
+                                    TextColor="#CCF3F6F9" />
+                                <Label
+                                    Text="{Binding FullName}"
+                                    FontSize="17"
+                                    TextColor="White"
+                                    FontFamily="RubikMedium"
+                                    LineBreakMode="WordWrap" />
+                            </VerticalStackLayout>
+
+                            <Label
+                                Grid.Column="1"
+                                Text="›"
+                                FontSize="24"
+                                TextColor="#CCF3F6F9"
+                                VerticalOptions="Center" />
+                        </Grid>
+
+                        <BoxView HeightRequest="1" Color="#33F3F6F9" />
+
+                        <Grid Padding="16,14" ColumnDefinitions="*,Auto">
+                            <VerticalStackLayout Spacing="4">
+                                <Label
+                                    Text="Дата рождения"
+                                    FontSize="14"
+                                    TextColor="#CCF3F6F9" />
+                                <Label
+                                    Text="{Binding BirthDateText}"
+                                    FontSize="17"
+                                    TextColor="White"
+                                    FontFamily="RubikMedium" />
+                            </VerticalStackLayout>
+
+                            <Label
+                                Grid.Column="1"
+                                Text="›"
+                                FontSize="24"
+                                TextColor="#CCF3F6F9"
+                                VerticalOptions="Center" />
+                        </Grid>
+
+                    </VerticalStackLayout>
+
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="PersonalDataSectionTapped" />
+                    </Border.GestureRecognizers>
+                </Border>
+
+                <!-- Подсказка -->
+                <Border
+                    Padding="14"
+                    Background="#FFFFFF"
+                    StrokeThickness="0"
+                    StrokeShape="RoundRectangle 16">
+
+                    <Label
+                        Text="Номер телефона используется для выпуска новых карт и идентификации клиента при списании бонусов в заведении."
+                        FontSize="13"
+                        TextColor="#4B5368"
+                        LineBreakMode="WordWrap" />
+                </Border>
+
+            </VerticalStackLayout>
+        </ScrollView>
+
+        <!-- Нижняя навигация -->
+        <controls:BottomNavBar
             Margin="16,0,16,12"
             VerticalOptions="End"
             CurrentTab="Profile" />
-	</Grid>
+    </Grid>
 </ContentPage>

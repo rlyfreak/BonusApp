@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
-
-namespace BonusApp.Models
+﻿namespace BonusApp.Models
 {
     public class TransactionItem
     {
@@ -13,5 +8,12 @@ namespace BonusApp.Models
         public decimal BonusAmount { get; set; }
         public DateTime Date { get; set; }
         public string Description { get; set; } = string.Empty;
+
+        public decimal BalanceBefore { get; set; }
+        public decimal BalanceAfter { get; set; }
+        public string VenueAddress { get; set; } = string.Empty;
+        public string OperationCode { get; set; } = string.Empty;
+        public string Comment { get; set;  } = string.Empty;
+
     }
 }

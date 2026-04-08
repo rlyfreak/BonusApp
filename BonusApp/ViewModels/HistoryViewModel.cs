@@ -53,11 +53,27 @@ public class HistoryViewModel : BaseViewModel
         set => SetProperty(ref _isHistoryEmpty, value);
     }
 
+    private bool _isTransactionSheetOpen;
+    public bool IsTransactionSheetOpen
+    {
+        get => _isTransactionSheetOpen;
+        set => SetProperty(ref _isTransactionSheetOpen, value);
+    }
+
+    private HistoryRecord? _selectedRecord;
+    public HistoryRecord? SelectedRecord
+    {
+        get => _selectedRecord;
+        set => SetProperty(ref _selectedRecord, value);
+    }
+
     public ObservableCollection<HistoryGroup> Groups { get; } = new();
 
     public ICommand ShowAllCommand { get; }
     public ICommand ShowAccrualCommand { get; }
     public ICommand ShowWriteOffCommand { get; }
+    public ICommand OpenTransactionDetailsCommand { get; }
+    public ICommand CloseTransactionSheetCommand { get; }
 
     private Color _allBackground = Color.FromArgb("#EDEFF5");
     public Color AllBackground
@@ -109,6 +125,20 @@ public class HistoryViewModel : BaseViewModel
         ShowAllCommand = new Command(() => SelectedFilter = "All");
         ShowAccrualCommand = new Command(() => SelectedFilter = "Accrual");
         ShowWriteOffCommand = new Command(() => SelectedFilter = "WriteOff");
+
+        OpenTransactionDetailsCommand = new Command<HistoryRecord>(record =>
+        {
+            if (record == null)
+                return;
+
+            SelectedRecord = record;
+            IsTransactionSheetOpen = true;
+        });
+
+        CloseTransactionSheetCommand = new Command(() =>
+        {
+            IsTransactionSheetOpen = false;
+        });
     }
 
     public void LoadHistory()
@@ -123,7 +153,12 @@ public class HistoryViewModel : BaseViewModel
                 Type = t.Type,
                 BonusAmount = t.BonusAmount,
                 Date = t.Date,
-                Description = t.Description
+                Description = t.Description,
+                BalanceBefore = t.BalanceBefore,
+                BalanceAfter = t.BalanceAfter,
+                VenueAddress = t.VenueAddress,
+                OperationCode = t.OperationCode,
+                Comment = t.Comment
             })
             .OrderByDescending(x => x.Date)
             .ToList();

@@ -1,8 +1,8 @@
 ﻿namespace BonusApp.Models
 {
-    public class Cafe
+    public class CatalogCardItem
     {
-        public int ID { get; set; }
+        public int Id { get; set; }
         public string Name { get; set; } = string.Empty;
     }
 }

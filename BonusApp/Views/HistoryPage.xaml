@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage
     x:Class="BonusApp.Views.HistoryPage"
+    x:Name="HistoryPageRoot"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:controls="clr-namespace:BonusApp.Controls"
@@ -131,6 +132,12 @@
                                 StrokeThickness="0"
                                 StrokeShape="RoundRectangle 18">
 
+                                <Border.GestureRecognizers>
+                                    <TapGestureRecognizer
+                                        Command="{Binding Source={x:Reference HistoryPageRoot}, Path=BindingContext.OpenTransactionDetailsCommand}"
+                                        CommandParameter="{Binding .}" />
+                                </Border.GestureRecognizers>
+
                                 <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto">
 
                                     <Label
@@ -197,5 +204,168 @@
             Margin="16,0,16,12"
             VerticalOptions="End"
             CurrentTab="History" />
+
+        <!-- Sheet деталей операции -->
+        <Grid
+            x:Name="TransactionSheetOverlay"
+            IsVisible="False"
+            BackgroundColor="#CC000000">
+
+            <Grid RowDefinitions="88,*">
+
+                <!-- верхняя зона для закрытия -->
+                <Grid Grid.Row="0">
+                    <Grid.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding CloseTransactionSheetCommand}" />
+                    </Grid.GestureRecognizers>
+                </Grid>
+
+                <!-- выезжающий лист -->
+                <Border
+                    x:Name="TransactionSheetContainer"
+                    Grid.Row="1"
+                    Background="#4C5263"
+                    StrokeThickness="0"
+                    StrokeShape="RoundRectangle 29,29,0,0"
+                    Padding="20,14,20,28"
+                    TranslationY="1200">
+
+                    <ScrollView>
+                        <VerticalStackLayout Spacing="16">
+
+                            <Grid ColumnDefinitions="Auto,*,Auto">
+                                <Button
+                                    Text="←"
+                                    Clicked="CloseTransactionSheetButton_Clicked"
+                                    BackgroundColor="Transparent"
+                                    TextColor="White"
+                                    FontSize="22"
+                                    Padding="0"
+                                    WidthRequest="36"
+                                    HeightRequest="36" />
+
+                                <Label
+                                    Grid.Column="1"
+                                    Text="{Binding SelectedRecord.Type}"
+                                    HorizontalOptions="Center"
+                                    VerticalOptions="Center"
+                                    FontSize="20"
+                                    FontFamily="RubikMedium"
+                                    TextColor="White" />
+
+                                <BoxView Grid.Column="2" WidthRequest="36" />
+                            </Grid>
+
+                            <Border
+                                HeightRequest="165"
+                                Background="White"
+                                StrokeThickness="0"
+                                StrokeShape="RoundRectangle 20">
+
+                                <Grid>
+                                    <Label
+                                        Text="{Binding SelectedRecord.CafeName}"
+                                        HorizontalOptions="Center"
+                                        VerticalOptions="Center"
+                                        FontSize="28"
+                                        FontFamily="RubikMedium"
+                                        TextColor="#1F2430" />
+                                </Grid>
+                            </Border>
+
+                            <Label
+                                Text="{Binding SelectedRecord.AmountTitle}"
+                                FontSize="24"
+                                FontFamily="RubikMedium"
+                                TextColor="White" />
+
+                            <Label
+                                Text="{Binding SelectedRecord.LargeSignedAmount}"
+                                FontSize="32"
+                                FontFamily="RubikMedium"
+                                TextColor="{Binding SelectedRecord.AmountColorHex}"
+                                HorizontalOptions="End" />
+
+                            <Label
+                                Text="Детали операции"
+                                FontSize="20"
+                                FontFamily="RubikMedium"
+                                TextColor="#CCF3F6F9" />
+
+                            <Border
+                                Background="#303645"
+                                StrokeThickness="0"
+                                StrokeShape="RoundRectangle 15"
+                                Padding="14">
+
+                                <VerticalStackLayout Spacing="12">
+
+                                    <Grid ColumnDefinitions="*,Auto">
+                                        <Label Text="Баланс до" FontSize="18" FontFamily="RubikMedium" TextColor="#CCF3F6F9" />
+                                        <Label Grid.Column="1" Text="{Binding SelectedRecord.BalanceBefore}" FontSize="18" TextColor="White" />
+                                    </Grid>
+
+                                    <BoxView HeightRequest="1" Color="#80F3F6F9" />
+
+                                    <Grid ColumnDefinitions="*,Auto">
+                                        <Label Text="Баланс после" FontSize="18" FontFamily="RubikMedium" TextColor="#CCF3F6F9" />
+                                        <Label Grid.Column="1" Text="{Binding SelectedRecord.BalanceAfter}" FontSize="18" TextColor="White" />
+                                    </Grid>
+
+                                    <BoxView HeightRequest="1" Color="#80F3F6F9" />
+
+                                    <Grid ColumnDefinitions="*,Auto">
+                                        <Label Text="Время" FontSize="18" FontFamily="RubikMedium" TextColor="#CCF3F6F9" />
+                                        <Label Grid.Column="1" Text="{Binding SelectedRecord.FullDateTimeText}" FontSize="18" TextColor="White" />
+                                    </Grid>
+
+                                    <BoxView HeightRequest="1" Color="#80F3F6F9" />
+
+                                    <Grid ColumnDefinitions="*,Auto">
+                                        <Label Text="Заведение" FontSize="18" FontFamily="RubikMedium" TextColor="#CCF3F6F9" />
+                                        <Label
+                                            Grid.Column="1"
+                                            Text="{Binding SelectedRecord.VenueAddress}"
+                                            FontSize="13"
+                                            TextColor="White"
+                                            HorizontalTextAlignment="End"
+                                            MaximumWidthRequest="180" />
+                                    </Grid>
+
+                                    <BoxView HeightRequest="1" Color="#80F3F6F9" />
+
+                                    <Grid ColumnDefinitions="*,Auto,Auto">
+                                        <Label Text="ID операции" FontSize="18" FontFamily="RubikMedium" TextColor="#CCF3F6F9" />
+                                        <Label
+                                            Grid.Column="1"
+                                            Text="{Binding SelectedRecord.OperationCode}"
+                                            FontSize="18"
+                                            TextColor="White"
+                                            Margin="0,0,8,0" />
+                                        <Button
+                                            Grid.Column="2"
+                                            Text="⧉"
+                                            Clicked="CopyOperationIdButton_Clicked"
+                                            BackgroundColor="Transparent"
+                                            TextColor="White"
+                                            Padding="0"
+                                            WidthRequest="24"
+                                            HeightRequest="24" />
+                                    </Grid>
+
+                                    <BoxView HeightRequest="1" Color="#80F3F6F9" />
+
+                                    <Grid ColumnDefinitions="*,Auto">
+                                        <Label Text="Комментарий" FontSize="18" FontFamily="RubikMedium" TextColor="#CCF3F6F9" />
+                                        <Label Grid.Column="1" Text="{Binding SelectedRecord.Comment}" FontSize="13" TextColor="White" />
+                                    </Grid>
+
+                                </VerticalStackLayout>
+                            </Border>
+                        </VerticalStackLayout>
+                    </ScrollView>
+                </Border>
+            </Grid>
+        </Grid>
     </Grid>
 </ContentPage>
