@@ -22,18 +22,12 @@ public partial class ProfilePage : ContentPage
 
     private async void PhoneCardTapped(object sender, TappedEventArgs e)
     {
-        await DisplayAlertAsync(
-            "Номер телефона",
-            "Следующим шагом здесь откроется EditPhonePage.",
-            "OK");
+        await Shell.Current.GoToAsync(nameof(EditPhonePage));
     }
 
     private async void EmailCardTapped(object sender, TappedEventArgs e)
     {
-        await DisplayAlertAsync(
-            "Электронная почта",
-            "Следующим шагом здесь откроется EditEmailPage.",
-            "OK");
+        await Shell.Current.GoToAsync(nameof(EditEmailPage));
     }
 
     private async void EditProfileButton_Clicked(object sender, EventArgs e)

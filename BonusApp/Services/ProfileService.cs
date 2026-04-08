@@ -25,4 +25,21 @@ public class ProfileService
     {
         return _profile;
     }
+    public void UpdateEmail(string email)
+    {
+        _profile.Email = email;
+    }
+
+    public void UpdatePhoneNumber(string phoneNumber)
+    {
+        _profile.PhoneNumber = phoneNumber;
+    }
+
+    public void UpdatePersonalData(string lastName, string firstName, string middleName, DateTime birthDate)
+    {
+        _profile.LastName = lastName;
+        _profile.FirstName = firstName;
+        _profile.MiddleName = middleName;
+        _profile.BirthDate = birthDate;
+    }
 }

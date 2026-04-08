@@ -80,4 +80,7 @@ public partial class BottomNavBar : ContentView
 
         await Shell.Current.GoToAsync("//ProfilePage");
     }
+    private void NavBarBackgroundTapped(object? sender, TappedEventArgs e)
+    {
+    }
 }

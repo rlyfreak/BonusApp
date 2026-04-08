@@ -12,6 +12,9 @@
         HeightRequest="92"
         StrokeShape="RoundRectangle 29"
         VerticalOptions="End">
+        <Border.GestureRecognizers>
+            <TapGestureRecognizer Tapped="NavBarBackgroundTapped" />
+        </Border.GestureRecognizers>
 
         <Border.Background>
             <LinearGradientBrush StartPoint="0,0.5" EndPoint="1,0.5">
