@@ -10,16 +10,16 @@
     BackgroundColor="#5E6883">
 
     <ContentPage.Resources>
-        <LinearGradientBrush x:Key="CatalogBackgroundBrush" StartPoint="0,0" EndPoint="0,1">
-            <GradientStop Color="#40475D" Offset="0.0" />
-            <GradientStop Color="#5E6883" Offset="1.0" />
+        <LinearGradientBrush x:Key="ProfileBackgroundBrush" StartPoint="0.18,0.08" EndPoint="0.82,1">
+            <GradientStop Color="#4C5263" Offset="0.45" />
+            <GradientStop Color="#9CAEE2" Offset="0.96" />
         </LinearGradientBrush>
     </ContentPage.Resources>
 
-    <Grid Background="{StaticResource CatalogBackgroundBrush}">
+    <Grid Background="{StaticResource ProfileBackgroundBrush}">
 
         <!-- Основной контент -->
-        <Grid Margin="0,0,0,110" RowDefinitions="Auto,Auto,*">
+        <Grid Margin="0" RowDefinitions="Auto,Auto,*">
 
             <!-- Заголовок -->
             <Grid

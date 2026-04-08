@@ -6,22 +6,22 @@
     HeightRequest="92">
 
 	<Border
-        Stroke="#1CFFFFFF"
-        StrokeThickness="1"
+        Stroke="#33FFFFFF"
+        StrokeThickness="1.4"
         Padding="18,10,18,12"
         HeightRequest="92"
         StrokeShape="RoundRectangle 29"
         VerticalOptions="End">
 
-		<Border.Background>
-			<LinearGradientBrush StartPoint="0,0.5" EndPoint="1,0.5">
-				<GradientStop Color="#3A404F" Offset="0.0" />
-				<GradientStop Color="#5F6982" Offset="0.5" />
-				<GradientStop Color="#3A404F" Offset="1.0" />
-			</LinearGradientBrush>
-		</Border.Background>
+        <Border.Background>
+            <LinearGradientBrush StartPoint="0,0.5" EndPoint="1,0.5">
+                <GradientStop Color="#D93A404F" Offset="0.0" />
+                <GradientStop Color="#D35F6982" Offset="0.5" />
+                <GradientStop Color="#D93A404F" Offset="1.0" />
+            </LinearGradientBrush>
+        </Border.Background>
 
-		<Grid
+        <Grid
             ColumnDefinitions="*,*,*,*"
             VerticalOptions="Center"
             HorizontalOptions="Fill">

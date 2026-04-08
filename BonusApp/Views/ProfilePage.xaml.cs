@@ -20,19 +20,35 @@ public partial class ProfilePage : ContentPage
         _viewModel.LoadProfile();
     }
 
-    private async void ContactsSectionTapped(object sender, TappedEventArgs e)
+    private async void PhoneCardTapped(object sender, TappedEventArgs e)
     {
         await DisplayAlertAsync(
-            "Контактные данные",
-            "Следующим шагом здесь откроются отдельные экраны редактирования номера телефона и электронной почты.",
+            "Номер телефона",
+            "Следующим шагом здесь откроется EditPhonePage.",
             "OK");
     }
 
-    private async void PersonalDataSectionTapped(object sender, TappedEventArgs e)
+    private async void EmailCardTapped(object sender, TappedEventArgs e)
     {
         await DisplayAlertAsync(
-            "Персональные данные",
-            "Следующим шагом здесь откроется экран редактирования фамилии, имени, отчества и даты рождения.",
+            "Электронная почта",
+            "Следующим шагом здесь откроется EditEmailPage.",
+            "OK");
+    }
+
+    private async void EditProfileButton_Clicked(object sender, EventArgs e)
+    {
+        await DisplayAlertAsync(
+            "Редактирование",
+            "Следующим шагом здесь откроется EditPersonalDataPage.",
+            "OK");
+    }
+
+    private async void LogoutButton_Clicked(object sender, EventArgs e)
+    {
+        await DisplayAlertAsync(
+            "Выход",
+            "В прототипе это действие пока показано как кнопка без реальной деавторизации.",
             "OK");
     }
 }
