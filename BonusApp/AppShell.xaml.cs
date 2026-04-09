@@ -13,5 +13,6 @@ public partial class AppShell : Shell
         Routing.RegisterRoute(nameof(TransactionHistoryPage), typeof(TransactionHistoryPage));
         Routing.RegisterRoute(nameof(EditPhonePage), typeof(EditPhonePage));
         Routing.RegisterRoute(nameof(EditEmailPage), typeof(EditEmailPage));
+        Routing.RegisterRoute(nameof(EditPersonalDataPage), typeof(EditPersonalDataPage));
     }
 }

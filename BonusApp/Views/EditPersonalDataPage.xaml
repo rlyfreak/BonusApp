@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="BonusApp.Views.EditPersonalDataPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+	xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    Shell.NavBarIsVisible="False"
+    Shell.TabBarIsVisible="False"
+    BackgroundColor="#5E6883">
+
+    <ContentPage.Resources>
+		<LinearGradientBrush x:Key="ProfileBackgroundBrush" StartPoint="0.18,0.08" EndPoint="0.82,1">
+			<GradientStop Color="#4C5263" Offset="0.45" />
+			<GradientStop Color="#9CAEE2" Offset="0.96" />
+		</LinearGradientBrush>
+	</ContentPage.Resources>
+
+	<Grid Background="{StaticResource ProfileBackgroundBrush}">
+
+        <!-- Назад -->
+        <Image
+            Source="back_chevron.svg"
+            WidthRequest="15"
+            HeightRequest="24"
+            Margin="27,25,0,0"
+            HorizontalOptions="Start"
+            VerticalOptions="Start"
+            Aspect="Fill">
+
+            <Image.GestureRecognizers>
+                <TapGestureRecognizer Tapped="BackChevron_Tapped" />
+            </Image.GestureRecognizers>
+        </Image>
+
+        <!-- Заголовок -->
+        <Label
+            Text="Персональные данные"
+            WidthRequest="297"
+            Margin="27,69,0,0"
+            HorizontalOptions="Start"
+            VerticalOptions="Start"
+            FontFamily="RubikMedium"
+            FontSize="26"
+            TextColor="#F3F6F9"
+            HorizontalTextAlignment="Start"
+            LineBreakMode="NoWrap" />
+
+        <!-- Фамилия -->
+        <Label
+            Text="Фамилия"
+            Margin="27,120,0,0"
+            HorizontalOptions="Start"
+            VerticalOptions="Start"
+            FontFamily="RubikMedium"
+            FontSize="16"
+            TextColor="#F3F6F9"
+            HorizontalTextAlignment="Start" />
+
+        <Border
+            WidthRequest="358"
+            HeightRequest="51"
+            Margin="27,149,0,0"
+            HorizontalOptions="Start"
+            VerticalOptions="Start"
+            Background="#303645"
+            StrokeThickness="0"
+            StrokeShape="RoundRectangle 15">
+
+            <Grid Padding="14,0">
+                <Entry
+                    Text="{Binding LastName}"
+                    BackgroundColor="Transparent"
+                    TextColor="#F3F6F9"
+                    FontFamily="RubikRegular"
+                    FontSize="18"
+                    Placeholder="Фамилия"
+                    PlaceholderColor="#99F3F6F9"
+                    ClearButtonVisibility="Never"
+                    HorizontalOptions="Fill"
+                    VerticalOptions="Center" />
+            </Grid>
+        </Border>
+
+        <!-- Имя -->
+        <Label
+            Text="Имя"
+            Margin="27,220,0,0"
+            HorizontalOptions="Start"
+            VerticalOptions="Start"
+            FontFamily="RubikMedium"
+            FontSize="16"
+            TextColor="#F3F6F9"
+            HorizontalTextAlignment="Start" />
+
+        <Border
+            WidthRequest="358"
+            HeightRequest="51"
+            Margin="27,249,0,0"
+            HorizontalOptions="Start"
+            VerticalOptions="Start"
+            Background="#303645"
+            StrokeThickness="0"
+            StrokeShape="RoundRectangle 15">
+
+            <Grid Padding="14,0">
+                <Entry
+                    Text="{Binding FirstName}"
+                    BackgroundColor="Transparent"
+                    TextColor="#F3F6F9"
+                    FontFamily="RubikRegular"
+                    FontSize="18"
+                    Placeholder="Имя"
+                    PlaceholderColor="#99F3F6F9"
+                    ClearButtonVisibility="Never"
+                    HorizontalOptions="Fill"
+                    VerticalOptions="Center" />
+            </Grid>
+        </Border>
+
+        <!-- Отчество -->
+        <Label
+            Text="Отчество"
+            Margin="27,320,0,0"
+            HorizontalOptions="Start"
+            VerticalOptions="Start"
+            FontFamily="RubikMedium"
+            FontSize="16"
+            TextColor="#F3F6F9"
+            HorizontalTextAlignment="Start" />
+
+        <Border
+            WidthRequest="358"
+            HeightRequest="51"
+            Margin="27,349,0,0"
+            HorizontalOptions="Start"
+            VerticalOptions="Start"
+            Background="#303645"
+            StrokeThickness="0"
+            StrokeShape="RoundRectangle 15">
+
+            <Grid Padding="14,0">
+                <Entry
+                    Text="{Binding MiddleName}"
+                    BackgroundColor="Transparent"
+                    TextColor="#F3F6F9"
+                    FontFamily="RubikRegular"
+                    FontSize="18"
+                    Placeholder="Отчество"
+                    PlaceholderColor="#99F3F6F9"
+                    ClearButtonVisibility="Never"
+                    HorizontalOptions="Fill"
+                    VerticalOptions="Center" />
+            </Grid>
+        </Border>
+
+        <!-- Дата рождения -->
+        <Label
+            Text="Дата рождения"
+            Margin="27,420,0,0"
+            HorizontalOptions="Start"
+            VerticalOptions="Start"
+            FontFamily="RubikMedium"
+            FontSize="16"
+            TextColor="#F3F6F9"
+            HorizontalTextAlignment="Start" />
+
+        <Border
+            WidthRequest="358"
+            HeightRequest="51"
+            Margin="27,449,0,0"
+            HorizontalOptions="Start"
+            VerticalOptions="Start"
+            Background="#303645"
+            StrokeThickness="0"
+            StrokeShape="RoundRectangle 15">
+
+            <Grid Padding="14,0">
+                <Entry
+                    Text="{Binding BirthDateText}"
+                    BackgroundColor="Transparent"
+                    TextColor="#F3F6F9"
+                    FontFamily="RubikRegular"
+                    FontSize="18"
+                    Placeholder="дд.мм.гггг"
+                    PlaceholderColor="#99F3F6F9"
+                    ClearButtonVisibility="Never"
+                    Keyboard="Text"
+                    HorizontalOptions="Fill"
+                    VerticalOptions="Center" />
+            </Grid>
+        </Border>
+
+        <!-- Сохранить -->
+        <Button
+            Text="Сохранить"
+            Clicked="SaveButton_Clicked"
+            WidthRequest="358"
+            HeightRequest="39"
+            Margin="27,0,0,25"
+            HorizontalOptions="Start"
+            VerticalOptions="End"
+            BackgroundColor="#F3F6F9"
+            TextColor="#4C5263"
+            FontFamily="RubikMedium"
+            FontSize="16"
+            CornerRadius="29">
+	<Button.Behaviors>
+                        <toolkit:TouchBehavior
+                            DefaultScale="1"
+                            PressedScale="0.97"
+                            PressedOpacity="0.96"
+                            PressedAnimationDuration="90"
+                            DefaultAnimationDuration="110" />
+                    </Button.Behaviors>
+                </Button>
+    </Grid>
+</ContentPage>

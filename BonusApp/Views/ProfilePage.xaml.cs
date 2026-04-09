@@ -32,10 +32,7 @@ public partial class ProfilePage : ContentPage
 
     private async void EditProfileButton_Clicked(object sender, EventArgs e)
     {
-        await DisplayAlertAsync(
-            "Редактирование",
-            "Следующим шагом здесь откроется EditPersonalDataPage.",
-            "OK");
+        await Shell.Current.GoToAsync(nameof(EditPersonalDataPage));
     }
 
     private async void LogoutButton_Clicked(object sender, EventArgs e)
