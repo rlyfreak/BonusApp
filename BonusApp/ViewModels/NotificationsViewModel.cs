@@ -8,7 +8,21 @@ public class NotificationsViewModel : BaseViewModel
 {
     private readonly NotificationService _notificationService;
 
-    public ObservableCollection<NotificationItem> Notifications { get; } = new();
+    private bool _hasItems;
+    public bool HasItems
+    {
+        get => _hasItems;
+        set => SetProperty(ref _hasItems, value);
+    }
+
+    private bool _isEmpty;
+    public bool IsEmpty
+    {
+        get => _isEmpty;
+        set => SetProperty(ref _isEmpty, value);
+    }
+
+    public ObservableCollection<NotificationGroup> Groups { get; } = new();
 
     public NotificationsViewModel()
     {
@@ -17,13 +31,22 @@ public class NotificationsViewModel : BaseViewModel
 
     public void LoadNotifications()
     {
-        Notifications.Clear();
-
         var notifications = _notificationService.GetNotifications();
 
-        foreach (var notification in notifications)
+        var grouped = notifications
+            .OrderByDescending(x => x.Date)
+            .GroupBy(x => x.DateGroupTitle)
+            .Select(g => new NotificationGroup(g.Key, g.OrderByDescending(x => x.Date)))
+            .ToList();
+
+        Groups.Clear();
+
+        foreach (var group in grouped)
         {
-            Notifications.Add(notification);
+            Groups.Add(group);
         }
+
+        HasItems = Groups.Count > 0;
+        IsEmpty = Groups.Count == 0;
     }
 }

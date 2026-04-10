@@ -3,50 +3,169 @@
     x:Class="BonusApp.Views.NotificationsPage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    Title="Уведомления">
+    xmlns:controls="clr-namespace:BonusApp.Controls"
+    Shell.NavBarIsVisible="False"
+    Shell.TabBarIsVisible="False"
+    BackgroundColor="#5E6883">
 
-	<VerticalStackLayout Padding="20" Spacing="16">
+    <ContentPage.Resources>
+        <LinearGradientBrush x:Key="ProfileBackgroundBrush" StartPoint="0.18,0.08" EndPoint="0.82,1">
+            <GradientStop Color="#4C5263" Offset="0.45" />
+            <GradientStop Color="#9CAEE2" Offset="0.96" />
+        </LinearGradientBrush>
+    </ContentPage.Resources>
 
-		<Label
+    <Grid Background="{StaticResource ProfileBackgroundBrush}">
+
+        <!-- Назад -->
+        <Image
+            Source="back_chevron.svg"
+            WidthRequest="15"
+            HeightRequest="24"
+            Margin="27,25,0,0"
+            HorizontalOptions="Start"
+            VerticalOptions="Start"
+            Aspect="Fill">
+
+            <Image.GestureRecognizers>
+                <TapGestureRecognizer Tapped="BackChevron_Tapped" />
+            </Image.GestureRecognizers>
+        </Image>
+
+        <!-- Заголовок -->
+        <Label
             Text="Уведомления"
+            Margin="0,15,0,0"
+            HorizontalOptions="Center"
+            VerticalOptions="Start"
+            FontFamily="RubikMedium"
             FontSize="26"
-            FontAttributes="Bold" />
+            TextColor="#F3F6F9" />
 
-		<Label
-            Text="История событий в приложении"
-            FontSize="14"
-            Opacity="0.8" />
+        <!-- Контент -->
+        <Grid Margin="0,70,0,0">
 
-		<CollectionView ItemsSource="{Binding Notifications}">
-			<CollectionView.EmptyView>
-				<Label
-                    Text="Пока уведомлений нет."
-                    HorizontalOptions="Center"
-                    VerticalOptions="Center" />
-			</CollectionView.EmptyView>
+            <!-- Список уведомлений -->
+            <CollectionView
+    Margin="27,0,27,0"
+    IsGrouped="True"
+    ItemsSource="{Binding Groups}"
+    IsVisible="{Binding HasItems}"
+    BackgroundColor="Transparent"
+    SelectionMode="None">
 
-			<CollectionView.ItemTemplate>
-				<DataTemplate>
-					<Frame Margin="0,0,0,14" Padding="16">
-						<VerticalStackLayout Spacing="8">
-							<Label
-                                Text="{Binding Title}"
-                                FontSize="18"
-                                FontAttributes="Bold" />
+                <CollectionView.GroupHeaderTemplate>
+                    <DataTemplate>
+                        <Label
+                Text="{Binding Title}"
+                Margin="0,0,0,15"
+                FontFamily="RubikMedium"
+                FontSize="24"
+                TextColor="#E6F3F6F9" />
+                    </DataTemplate>
+                </CollectionView.GroupHeaderTemplate>
 
-							<Label
-                                Text="{Binding Message}"
-                                FontSize="15" />
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Border
+                Margin="0,0,0,23"
+                MinimumHeightRequest="61"
+                Padding="15,10"
+                Background="#313645"
+                StrokeThickness="0"
+                StrokeShape="RoundRectangle 15">
 
-							<Label
-                                Text="{Binding CreatedAt, StringFormat='Дата: {0:dd.MM.yyyy HH:mm}'}"
-                                FontSize="13"
-                                Opacity="0.8" />
-						</VerticalStackLayout>
-					</Frame>
-				</DataTemplate>
-			</CollectionView.ItemTemplate>
-		</CollectionView>
+                            <Grid
+                    ColumnDefinitions="37,12,*,Auto"
+                    RowDefinitions="Auto,Auto"
+                    ColumnSpacing="0"
+                    RowSpacing="0">
 
-	</VerticalStackLayout>
+                                <!-- Иконка -->
+                                <Image
+                        Grid.RowSpan="2"
+                        Source="{Binding IconSource}"
+                        WidthRequest="37"
+                        HeightRequest="37"
+                        HorizontalOptions="Start"
+                        VerticalOptions="Center"
+                        Aspect="AspectFit" />
+
+                                <!-- Заголовок -->
+                                <Label
+                        Grid.Column="2"
+                        Text="{Binding Title}"
+                        FontSize="18"
+                        FontFamily="RubikMedium"
+                        TextColor="#F3F6F9"
+                        LineBreakMode="TailTruncation"
+                        MaxLines="1"
+                        VerticalOptions="End" />
+
+                                <!-- Время -->
+                                <Label
+                        Grid.Column="3"
+                        Text="{Binding TimeText}"
+                        FontSize="13"
+                        FontFamily="RubikRegular"
+                        TextColor="#CCF3F6F9"
+                        Margin="10,2,0,0"
+                        HorizontalOptions="End"
+                        VerticalOptions="Start" />
+
+                                <!-- Описание -->
+                                <Label
+                        Grid.Row="1"
+                        Grid.Column="2"
+                        Text="{Binding Message}"
+                        FontSize="13"
+                        FontFamily="RubikRegular"
+                        TextColor="#CCF3F6F9"
+                        LineBreakMode="TailTruncation"
+                        MaxLines="1"
+                        VerticalOptions="Start" />
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+
+                <CollectionView.Footer>
+                    <Grid
+            HeightRequest="120"
+            BackgroundColor="Transparent" />
+                </CollectionView.Footer>
+            </CollectionView>
+
+            <!-- Пустое состояние -->
+            <VerticalStackLayout
+                IsVisible="{Binding IsEmpty}"
+                HorizontalOptions="Center"
+                VerticalOptions="Center"
+                Spacing="0">
+
+                <Label
+                    Text="Пока ничего нет"
+                    WidthRequest="194"
+                    FontSize="24"
+                    FontFamily="RubikMedium"
+                    TextColor="#E6F3F6F9"
+                    HorizontalTextAlignment="Center" />
+
+                <Label
+                    Text="Здесь будут показываться ваши будущие уведомления"
+                    WidthRequest="329"
+                    FontSize="24"
+                    FontFamily="RubikRegular"
+                    TextColor="#80F3F6F9"
+                    HorizontalTextAlignment="Center"
+                    LineBreakMode="WordWrap" />
+            </VerticalStackLayout>
+        </Grid>
+
+        <!-- Нижняя навигация -->
+        <controls:BottomNavBar
+            Margin="16,0,16,12"
+            VerticalOptions="End"
+            CurrentTab="Cards" />
+    </Grid>
 </ContentPage>

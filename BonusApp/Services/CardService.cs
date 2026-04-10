@@ -27,16 +27,16 @@ public class CardService
      new LoyaltyCard
      {
          Id = 3,
-         CafeName = "Чайка",
+         CafeName = "Комод",
          CardNumber = "CH-100003",
          BonusBalance = 50,
-         QrCodeValue = "QR-CA-100003"
+         QrCodeValue = "QR-KD-100003"
      }
     };
     private int _nextId = 4;
     private readonly NotificationService _notificationService;
-    private CardService() 
-    { 
+    private CardService()
+    {
         _notificationService = NotificationService.Instance;
     }
     public List<LoyaltyCard> GetCards()
@@ -57,8 +57,8 @@ public class CardService
         string cafename = card.CafeName;
         _cards.Remove(card);
         _notificationService.AddNotification(
-            "Удаление карты",
-            $"Бонусная карта заведения {cafename} была успешно удалена.");
+            "Карта удалена",
+            $"{cafename} удалена из приложения.");
         return true;
     }
     public bool HasCardForCafe(string cafeName)
@@ -83,8 +83,8 @@ public class CardService
         };
         _cards.Add(newCard);
         _notificationService.AddNotification(
-            "Создание карт",
-            $"Бонусная карта для заведения {cafename} была успешно создана.");
+            "Карта добавлена",
+            $"{cafename} добавлена в приложение.");
         _nextId++;
         return newCard;
     }
@@ -94,10 +94,9 @@ public class CardService
         {
             "Калипсо" => "KO",
             "Розмарин" => "RN",
-            "Чайка" => "CA",
             "Мечтатели" => "MI",
-            "Сахара не надо" => "SO",
-            "Ательер" => "AR",
+            "Знак" => "ZK",
+            "Винил" => "VL",
             "Комод" => "KD",
             _ => "XX"
         };

@@ -19,4 +19,8 @@ public partial class NotificationsPage : ContentPage
         base.OnAppearing();
         _viewModel.LoadNotifications();
     }
+    private async void BackChevron_Tapped(object sender, EventArgs e)
+    {
+        await Shell.Current.GoToAsync("..");
+    }
 }
