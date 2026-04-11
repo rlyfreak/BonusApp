@@ -16,7 +16,7 @@ namespace BonusApp.Services
             new Cafe { ID = 1, Name = "Калипсо" },
             new Cafe { ID = 2, Name = "Розмарин" },
             new Cafe { ID = 3, Name = "Винил" },
-            new Cafe { ID = 4, Name = "Мечтатели" },
+            new Cafe { ID = 4, Name = "Редакция" },
             new Cafe { ID = 5, Name = "Знак" },
             new Cafe { ID = 6, Name = "Комод" }
         };

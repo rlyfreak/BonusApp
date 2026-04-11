@@ -19,157 +19,292 @@
     <Grid Background="{StaticResource ProfileBackgroundBrush}">
 
         <!-- ОСНОВНОЙ КОНТЕНТ -->
-        <Grid Grid.Row="0" RowDefinitions="Auto,Auto,*">
+        <Grid RowDefinitions="Auto,Auto,*">
 
-            <!-- Верхняя часть -->
+            <!-- Шапка -->
             <Grid
                 Grid.Row="0"
-                Padding="20,18,20,12"
+                Padding="27,15,27,0"
                 ColumnDefinitions="*,Auto">
 
                 <Label
                     Text="Мои карты"
-                    FontSize="28"
-                    FontAttributes="Bold"
-                    TextColor="White"
+                    FontFamily="RubikMedium"
+                    FontSize="36"
+                    TextColor="#F3F6F9"
                     VerticalOptions="Center" />
 
                 <Border
                     Grid.Column="1"
-                    WidthRequest="38"
-                    HeightRequest="38"
-                    Padding="0"
-                    Background="#E8ECF4"
+                    WidthRequest="51"
+                    HeightRequest="45"
+                    Background="#F3F6F9"
                     StrokeThickness="0"
-                    StrokeShape="RoundRectangle 12">
+                    StrokeShape="RoundRectangle 15"
+                    VerticalOptions="Center">
 
-                    <Button
-                        Command="{Binding OpenNotificationsPageCommand}"
-                        Text="🔔"
-                        FontSize="16"
-                        BackgroundColor="Transparent"
-                        TextColor="#2F3648"
-                        Padding="0" />
+                    <Border.Shadow>
+                        <Shadow
+                            Brush="Black"
+                            Offset="0,2"
+                            Radius="7.5"
+                            Opacity="0.25" />
+                    </Border.Shadow>
+
+                    <Grid>
+                        <Image
+                            Source="notification_bell.svg"
+                            WidthRequest="22"
+                            HeightRequest="27"
+                            HorizontalOptions="Center"
+                            VerticalOptions="Center"
+                            Aspect="AspectFit" />
+
+                        <Grid.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding OpenNotificationsPageCommand}" />
+                        </Grid.GestureRecognizers>
+                    </Grid>
                 </Border>
             </Grid>
 
             <!-- Поиск -->
             <Border
                 Grid.Row="1"
-                Margin="20,0,20,14"
-                Padding="0"
-                Background="#2F3648"
+                Margin="27,10,27,0"
+                HeightRequest="51"
+                Background="#313645"
                 StrokeThickness="0"
-                StrokeShape="RoundRectangle 14">
+                StrokeShape="RoundRectangle 15">
 
-                <Grid ColumnDefinitions="Auto,*" Padding="14,8">
-                    <Label
-                        Text="⌕"
-                        FontSize="18"
-                        TextColor="#AEB6C9"
-                        VerticalOptions="Center" />
+                <Grid ColumnDefinitions="Auto,*" Padding="15,0">
+                    <Image
+                        Source="search.svg"
+                        WidthRequest="21"
+                        HeightRequest="21"
+                        VerticalOptions="Center"
+                        HorizontalOptions="Center"
+                        Aspect="AspectFit" />
 
-                    <Entry
+                    <Grid
                         Grid.Column="1"
+                        Margin="10,0,0,0"
+                        VerticalOptions="Center">
+
+                        <Entry
                         Text="{Binding SearchText}"
                         Placeholder="Найти карту"
-                        PlaceholderColor="#AEB6C9"
-                        TextColor="White"
+                        PlaceholderColor="#99F3F6F9"
+                        TextColor="#F3F6F9"
                         BackgroundColor="Transparent"
-                        FontSize="15"
-                        Margin="10,0,0,0" />
+                        FontFamily="RubikMedium"
+                        FontSize="24"
+                        HeightRequest="100"
+                        VerticalOptions="Center"
+                        VerticalTextAlignment="Center"
+                        TranslationY="1" />
+                    </Grid>
                 </Grid>
             </Border>
 
-            <!-- Список / пустое состояние -->
-            <Grid Grid.Row="2">
+            <!-- Список карт / пустое состояние -->
+            <Grid Grid.Row="2" Margin="0,18,0,0">
 
                 <CollectionView
-                    Margin="20,0,20,0"
+                    Margin="27,0,27,0"
                     ItemsSource="{Binding Cards}"
                     IsVisible="{Binding HasCards}"
-                    SelectionMode="None">
+                    SelectionMode="None"
+                    BackgroundColor="Transparent">
 
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
-                            <Border
-                                Margin="0,0,0,14"
-                                Padding="14"
-                                Background="White"
-                                StrokeThickness="0"
-                                StrokeShape="RoundRectangle 18">
+                            <Grid
+            WidthRequest="358"
+            HeightRequest="165"
+            Margin="0,0,0,18"
+            HorizontalOptions="Center">
 
-                                <Border.GestureRecognizers>
+                                <!-- ГОТОВЫЕ КАРТОЧКИ-АССЕТЫ -->
+                                <Border
+                WidthRequest="358"
+                HeightRequest="165"
+                HorizontalOptions="Center"
+                VerticalOptions="Center"
+                Background="Transparent"
+                StrokeThickness="0"
+                StrokeShape="RoundRectangle 20"
+                IsVisible="{Binding UseFullCardArt}">
+
+                                    <Grid>
+                                        <Image
+                        Source="{Binding FullCardArtSource}"
+                        Aspect="AspectFill"
+                        HorizontalOptions="Fill"
+                        VerticalOptions="Fill"
+                        Scale="{Binding FullCardArtScale}" />
+
+                                        <Border
+                        WidthRequest="{Binding BadgeWidth}"
+                        HeightRequest="29"
+                        Margin="0,0,9,8"
+                        HorizontalOptions="End"
+                        VerticalOptions="End"
+                        Background="{Binding BadgeBackgroundColor}"
+                        StrokeThickness="0"
+                        StrokeShape="RoundRectangle 15"
+                        ZIndex="10">
+
+                                            <Label
+                            HorizontalOptions="Center"
+                            VerticalOptions="Center"
+                            HorizontalTextAlignment="Center"
+                            VerticalTextAlignment="Center">
+                                                <Label.FormattedText>
+                                                    <FormattedString>
+                                                        <Span
+                                        Text="{Binding BonusBalance}"
+                                        FontFamily="RubikMedium"
+                                        FontSize="16"
+                                        TextColor="#F3F6F9" />
+                                                        <Span
+                                        Text=" бонусов"
+                                        FontFamily="RubikRegular"
+                                        FontSize="16"
+                                        TextColor="#F3F6F9" />
+                                                    </FormattedString>
+                                                </Label.FormattedText>
+                                            </Label>
+                                        </Border>
+                                    </Grid>
+                                </Border>
+
+                                <!-- РОЗМАРИН -->
+                                <Border
+                WidthRequest="358"
+                HeightRequest="165"
+                HorizontalOptions="Center"
+                VerticalOptions="Center"
+                Background="White"
+                StrokeThickness="0"
+                StrokeShape="RoundRectangle 20"
+                IsVisible="{Binding UseCenteredLogoCard}">
+
+                                    <Grid>
+                                        <Image
+                        Source="{Binding CenterLogoSource}"
+                        WidthRequest="64"
+                        HeightRequest="76"
+                        HorizontalOptions="Center"
+                        VerticalOptions="Center"
+                        Aspect="AspectFit" />
+
+                                        <Border
+                        WidthRequest="{Binding BadgeWidth}"
+                        HeightRequest="29"
+                        Margin="0,0,9,8"
+                        HorizontalOptions="End"
+                        VerticalOptions="End"
+                        Background="{Binding BadgeBackgroundColor}"
+                        StrokeThickness="0"
+                        StrokeShape="RoundRectangle 15"
+                        ZIndex="10">
+
+                                            <Label
+                            HorizontalOptions="Center"
+                            VerticalOptions="Center"
+                            HorizontalTextAlignment="Center"
+                            VerticalTextAlignment="Center">
+                                                <Label.FormattedText>
+                                                    <FormattedString>
+                                                        <Span
+                                        Text="{Binding BonusBalance}"
+                                        FontFamily="RubikMedium"
+                                        FontSize="16"
+                                        TextColor="#F3F6F9" />
+                                                        <Span
+                                        Text=" бонусов"
+                                        FontFamily="RubikRegular"
+                                        FontSize="16"
+                                        TextColor="#F3F6F9" />
+                                                    </FormattedString>
+                                                </Label.FormattedText>
+                                            </Label>
+                                        </Border>
+                                    </Grid>
+                                </Border>
+
+                                <!-- FALLBACK -->
+                                <Border
+                WidthRequest="358"
+                HeightRequest="165"
+                HorizontalOptions="Center"
+                VerticalOptions="Center"
+                Background="White"
+                StrokeThickness="0"
+                StrokeShape="RoundRectangle 20"
+                IsVisible="{Binding UseFallbackCard}">
+
+                                    <Grid>
+                                        <Label
+                        Text="{Binding CafeName}"
+                        HorizontalOptions="Center"
+                        VerticalOptions="Center"
+                        FontFamily="RubikMedium"
+                        FontSize="28"
+                        TextColor="{Binding FallbackTextColor}" />
+
+                                        <Border
+                        WidthRequest="{Binding BadgeWidth}"
+                        HeightRequest="29"
+                        Margin="0,0,9,8"
+                        HorizontalOptions="End"
+                        VerticalOptions="End"
+                        Background="{Binding BadgeBackgroundColor}"
+                        StrokeThickness="0"
+                        StrokeShape="RoundRectangle 15"
+                        ZIndex="10">
+
+                                            <Label
+                            HorizontalOptions="Center"
+                            VerticalOptions="Center"
+                            HorizontalTextAlignment="Center"
+                            VerticalTextAlignment="Center">
+                                                <Label.FormattedText>
+                                                    <FormattedString>
+                                                        <Span
+                                        Text="{Binding BonusBalance}"
+                                        FontFamily="RubikMedium"
+                                        FontSize="16"
+                                        TextColor="#F3F6F9" />
+                                                        <Span
+                                        Text=" бонусов"
+                                        FontFamily="RubikRegular"
+                                        FontSize="16"
+                                        TextColor="#F3F6F9" />
+                                                    </FormattedString>
+                                                </Label.FormattedText>
+                                            </Label>
+                                        </Border>
+                                    </Grid>
+                                </Border>
+
+                                <Grid.GestureRecognizers>
                                     <TapGestureRecognizer
-                                        Command="{Binding Source={x:Reference CardsPageRoot}, Path=BindingContext.OpenCardDetailsCommand}"
-                                        CommandParameter="{Binding .}" />
-                                </Border.GestureRecognizers>
-
-                                <Grid ColumnDefinitions="Auto,*,Auto">
-
-                                    <Border
-                                        WidthRequest="54"
-                                        HeightRequest="54"
-                                        Background="#EEF2F8"
-                                        StrokeThickness="0"
-                                        StrokeShape="RoundRectangle 27"
-                                        VerticalOptions="Center">
-
-                                        <Label
-                                            Text="{Binding CafeName, StringFormat='{0:0}'}"
-                                            HorizontalOptions="Center"
-                                            VerticalOptions="Center"
-                                            FontSize="18"
-                                            FontAttributes="Bold"
-                                            TextColor="#4A536B" />
-                                    </Border>
-
-                                    <VerticalStackLayout
-                                        Grid.Column="1"
-                                        Margin="12,0,12,0"
-                                        Spacing="4"
-                                        VerticalOptions="Center">
-
-                                        <Label
-                                            Text="{Binding CafeName}"
-                                            FontSize="18"
-                                            FontAttributes="Bold"
-                                            TextColor="#1F2430"
-                                            LineBreakMode="TailTruncation" />
-
-                                        <Label
-                                            Text="{Binding CardNumber}"
-                                            FontSize="13"
-                                            TextColor="#6C7488" />
-
-                                        <Label
-                                            Text="{Binding BonusBalance, StringFormat='Баланс: {0}'}"
-                                            FontSize="13"
-                                            TextColor="#6C7488" />
-                                    </VerticalStackLayout>
-
-                                    <Border
-                                        Grid.Column="2"
-                                        Padding="10,4"
-                                        Background="#5B6784"
-                                        StrokeThickness="0"
-                                        StrokeShape="RoundRectangle 10"
-                                        VerticalOptions="End">
-
-                                        <Label
-                                            Text="{Binding BonusBalance, StringFormat='{0} бонусов'}"
-                                            FontSize="11"
-                                            FontAttributes="Bold"
-                                            TextColor="White" />
-                                    </Border>
-                                </Grid>
-                            </Border>
+                    Command="{Binding Source={x:Reference CardsPageRoot}, Path=BindingContext.OpenCardDetailsCommand}"
+                    CommandParameter="{Binding .}" />
+                                </Grid.GestureRecognizers>
+                            </Grid>
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
+
+                    <CollectionView.Footer>
+                        <Grid HeightRequest="140" BackgroundColor="Transparent" />
+                    </CollectionView.Footer>
                 </CollectionView>
 
+                <!-- Пустое состояние -->
                 <Grid
-                    Margin="20,0,20,0"
+                    Margin="27,0,27,0"
                     IsVisible="{Binding IsCardsEmpty}">
 
                     <VerticalStackLayout
@@ -180,23 +315,24 @@
                         <Label
                             Text="У вас пока нет бонусных карт."
                             FontSize="20"
-                            FontAttributes="Bold"
-                            TextColor="White"
+                            FontFamily="RubikMedium"
+                            TextColor="#F3F6F9"
                             HorizontalTextAlignment="Center" />
 
                         <Label
                             Text="Добавьте первую карту, чтобы начать пользоваться приложением."
                             FontSize="14"
+                            FontFamily="RubikRegular"
                             TextColor="#D7DDEA"
                             HorizontalTextAlignment="Center"
                             MaximumWidthRequest="280" />
 
                         <Button
                             Text="Добавить карту"
-                            Command="{Binding OpenAddCardPageCommand}"
-                            BackgroundColor="White"
+                            Command="{Binding OpenCatalogPageCommand}"
+                            BackgroundColor="#F3F6F9"
                             TextColor="#374056"
-                            FontAttributes="Bold"
+                            FontFamily="RubikMedium"
                             FontSize="16"
                             CornerRadius="14"
                             HeightRequest="52"
@@ -206,17 +342,15 @@
             </Grid>
         </Grid>
 
-        <!-- НИЖНЯЯ НАВИГАЦИЯ -->
+        <!-- Нижняя навигация -->
         <controls:BottomNavBar
-            Grid.Row="1"
             Margin="16,0,16,12"
             VerticalOptions="End"
             CurrentTab="Cards" />
 
-        <!-- OVERLAY С ЛИСТОМ -->
+        <!-- Bottom sheet -->
         <Grid
             x:Name="CardSheetOverlay"
-            Grid.RowSpan="2"
             IsVisible="False"
             BackgroundColor="#66000000">
 

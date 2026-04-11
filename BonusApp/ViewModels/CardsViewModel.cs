@@ -54,7 +54,7 @@ public class CardsViewModel : BaseViewModel
 
     public ObservableCollection<LoyaltyCard> Cards { get; } = new();
 
-    public ICommand OpenAddCardPageCommand { get; }
+    public ICommand OpenCatalogPageCommand { get; }
     public ICommand OpenNotificationsPageCommand { get; }
     public ICommand OpenCardDetailsCommand { get; }
     public ICommand CloseCardSheetCommand { get; }
@@ -63,9 +63,9 @@ public class CardsViewModel : BaseViewModel
     {
         _cardService = CardService.Instance;
 
-        OpenAddCardPageCommand = new Command(async () =>
+        OpenCatalogPageCommand = new Command(async () =>
         {
-            await Shell.Current.GoToAsync(nameof(AddCardPage));
+            await Shell.Current.GoToAsync(nameof(CatalogPage));
         });
 
         OpenNotificationsPageCommand = new Command(async () =>
