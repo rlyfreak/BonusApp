@@ -12,25 +12,25 @@ public class CardService
      {
          Id = 1,
          CafeName = "Калипсо",
-         CardNumber = "CH-100001",
+         CardNumber = "KO-100001",
          BonusBalance = 250,
-         QrCodeValue = "QR-KO-100001"
+         QrCodeSource = "qr_code_kalipso.svg"
      },
      new LoyaltyCard
      {
          Id = 2,
          CafeName = "Розмарин",
-         CardNumber = "CH-100002",
+         CardNumber = "RN-100002",
          BonusBalance = 150,
-         QrCodeValue = "QR-RN-100002"
+         QrCodeSource = "qr_code_rozmarin.svg"
      },
      new LoyaltyCard
      {
          Id = 3,
          CafeName = "Комод",
-         CardNumber = "CH-100003",
+         CardNumber = "KD-100003",
          BonusBalance = 50,
-         QrCodeValue = "QR-KD-100003"
+         QrCodeSource = "qr_code_komod.svg"
      }
     };
     private int _nextId = 4;
@@ -71,7 +71,6 @@ public class CardService
             return null;
         string prefix = GetPrefix(cafename);
         string cardNumber = $"{prefix}-{_nextId:000000}";
-        string qrCode = $"QR-{cardNumber}";
 
         var newCard = new LoyaltyCard
         {
@@ -79,7 +78,7 @@ public class CardService
             CafeName = cafename,
             CardNumber = cardNumber,
             BonusBalance = 0,
-            QrCodeValue = qrCode
+            QrCodeSource = GetQrCodeSource(cafename)
         };
         _cards.Add(newCard);
         _notificationService.AddNotification(
@@ -88,6 +87,21 @@ public class CardService
         _nextId++;
         return newCard;
     }
+
+    private string GetQrCodeSource(string cafename)
+    {
+        return cafename switch
+        {
+            "Калипсо" => "qr_code_kalipso.svg",
+            "Розмарин" => "qr_code_rozmarin.svg",
+            "KoMod" => "qr_code_komod.svg",
+            "Винил" => "qr_code_vinyl.svg",
+            "Знак" => "qr_code_znak.svg",
+            "Редакция" => "qr_code_redac.svg",
+            _ => string.Empty
+        };
+    }
+
     private string GetPrefix(string cafeName)
     {
         return cafeName switch

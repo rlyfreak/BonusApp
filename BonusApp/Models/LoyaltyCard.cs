@@ -59,4 +59,6 @@ public class LoyaltyCard
     };
 
     public string FallbackTextColor => "#2F3648";
+
+    public string QrCodeSource { get; set; } = string.Empty;
 }
