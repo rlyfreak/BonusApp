@@ -7,6 +7,17 @@ public partial class HistoryPage : ContentPage
 {
     private readonly HistoryViewModel _viewModel;
     private bool _isAnimating;
+    private bool _isHistoryCardTapInProgress;
+
+    private double _headerNaturalHeight = -1;
+    private bool _isHeaderHidden;
+    private bool _isHeaderAnimating;
+    private double _lastVerticalOffset;
+    private const double ScrollDeltaThreshold = 6;
+    private const double HideAfterOffset = 20;
+    private bool _isSearchFocused;
+
+    private const int MinItemsForHeaderCollapse = 4;
 
     public HistoryPage()
     {
@@ -17,10 +28,238 @@ public partial class HistoryPage : ContentPage
         _viewModel.PropertyChanged += ViewModel_PropertyChanged;
     }
 
+    private bool CanCollapseHeader()
+    {
+        return _viewModel.Groups.Sum(g => g.Count) >= MinItemsForHeaderCollapse;
+    }
+
     protected override void OnAppearing()
     {
         base.OnAppearing();
         _viewModel.LoadHistory();
+
+        Dispatcher.Dispatch(() =>
+        {
+            ShowHeaderImmediate();
+            _lastVerticalOffset = 0;
+        });
+
+        Dispatcher.DispatchDelayed(TimeSpan.FromMilliseconds(60), () =>
+        {
+            try
+            {
+                HistoryCollectionView.ScrollTo(0, position: ScrollToPosition.Start, animate: false);
+            }
+            catch
+            {
+            }
+
+            ShowHeaderImmediate();
+            _lastVerticalOffset = 0;
+        });
+    }
+
+    protected override void OnDisappearing()
+    {
+        base.OnDisappearing();
+        ShowHeaderImmediate();
+        _lastVerticalOffset = 0;
+    }
+
+    private void HeaderContainer_SizeChanged(object? sender, EventArgs e)
+    {
+        if (_headerNaturalHeight > 0)
+            return;
+
+        if (HeaderContainer.Height <= 0)
+            return;
+
+        _headerNaturalHeight = HeaderContainer.Height;
+        HeaderSlot.HeightRequest = _headerNaturalHeight;
+        ShowHeaderImmediate();
+    }
+
+    private void ShowHeaderImmediate()
+    {
+        if (_headerNaturalHeight <= 0)
+            return;
+
+        HeaderContainer.CancelAnimations();
+        HeaderContainer.IsVisible = true;
+        HeaderSlot.HeightRequest = _headerNaturalHeight;
+        HeaderContainer.Opacity = 1;
+        HeaderContainer.TranslationY = 0;
+
+        _isHeaderHidden = false;
+        _isHeaderAnimating = false;
+    }
+
+    private async Task HideHeaderAsync()
+    {
+        if (_headerNaturalHeight <= 0 || _isHeaderHidden || _isHeaderAnimating)
+            return;
+
+        _isHeaderAnimating = true;
+
+        try
+        {
+            HeaderContainer.CancelAnimations();
+
+            await Task.WhenAll(
+                HeaderContainer.TranslateToAsync(0, -18, 140, Easing.CubicOut),
+                HeaderContainer.FadeToAsync(0, 120, Easing.CubicOut)
+            );
+
+            HeaderContainer.IsVisible = false;
+            HeaderSlot.HeightRequest = 0;
+            HeaderContainer.Opacity = 1;
+            HeaderContainer.TranslationY = 0;
+
+            _isHeaderHidden = true;
+        }
+        finally
+        {
+            _isHeaderAnimating = false;
+        }
+    }
+
+    private async Task ShowHeaderAsync()
+    {
+        if (_headerNaturalHeight <= 0 || !_isHeaderHidden || _isHeaderAnimating)
+            return;
+
+        _isHeaderAnimating = true;
+
+        try
+        {
+            HeaderContainer.CancelAnimations();
+
+            HeaderSlot.HeightRequest = _headerNaturalHeight;
+            HeaderContainer.IsVisible = true;
+            HeaderContainer.Opacity = 0;
+            HeaderContainer.TranslationY = -18;
+
+            await Task.WhenAll(
+                HeaderContainer.TranslateToAsync(0, 0, 160, Easing.CubicOut),
+                HeaderContainer.FadeToAsync(1, 160, Easing.CubicOut)
+            );
+
+            _isHeaderHidden = false;
+        }
+        finally
+        {
+            _isHeaderAnimating = false;
+        }
+    }
+
+    private async void HistoryCollectionView_Scrolled(object sender, ItemsViewScrolledEventArgs e)
+    {
+        if (_headerNaturalHeight <= 0)
+            return;
+
+        if (!CanCollapseHeader())
+        {
+            ShowHeaderImmediate();
+            _lastVerticalOffset = e.VerticalOffset;
+            return;
+        }
+
+        if (_isSearchFocused || !string.IsNullOrWhiteSpace(_viewModel.SearchText))
+        {
+            ShowHeaderImmediate();
+            _lastVerticalOffset = e.VerticalOffset;
+            return;
+        }
+
+        if (e.VerticalOffset <= 0)
+        {
+            ShowHeaderImmediate();
+            _lastVerticalOffset = 0;
+            return;
+        }
+
+        double delta = e.VerticalOffset - _lastVerticalOffset;
+        _lastVerticalOffset = e.VerticalOffset;
+
+        if (_isHeaderAnimating)
+            return;
+
+        if (Math.Abs(delta) < ScrollDeltaThreshold)
+            return;
+
+        if (delta > 0 && e.VerticalOffset > HideAfterOffset)
+            await HideHeaderAsync();
+        else if (delta < 0 || e.VerticalOffset <= HideAfterOffset)
+            await ShowHeaderAsync();
+    }
+
+    private void SearchEntry_Focused(object sender, FocusEventArgs e)
+    {
+        _isSearchFocused = true;
+        ShowHeaderImmediate();
+        _lastVerticalOffset = 0;
+    }
+
+    private void SearchEntry_Unfocused(object sender, FocusEventArgs e)
+    {
+        _isSearchFocused = false;
+        ShowHeaderImmediate();
+        _lastVerticalOffset = 0;
+    }
+
+    private void SearchEntry_TextChanged(object sender, TextChangedEventArgs e)
+    {
+        ShowHeaderImmediate();
+        _lastVerticalOffset = 0;
+
+        Dispatcher.Dispatch(() =>
+        {
+            try
+            {
+                if (_viewModel.Groups.Sum(g => g.Count) > 0)
+                    HistoryCollectionView.ScrollTo(0, position: ScrollToPosition.Start, animate: false);
+            }
+            catch
+            {
+            }
+
+            ShowHeaderImmediate();
+            _lastVerticalOffset = 0;
+        });
+    }
+
+    private async void HistoryCard_Tapped(object sender, TappedEventArgs e)
+    {
+        if (_isHistoryCardTapInProgress || _isAnimating)
+            return;
+
+        if (sender is not Border historyCardBorder)
+            return;
+
+        if (historyCardBorder.BindingContext is not BonusApp.Models.HistoryRecord record)
+            return;
+
+        _isHistoryCardTapInProgress = true;
+
+        try
+        {
+            await Task.WhenAll(
+                historyCardBorder.ScaleToAsync(0.97, 80, Easing.CubicOut),
+                historyCardBorder.FadeToAsync(0.96, 80, Easing.CubicOut)
+            );
+
+            await Task.WhenAll(
+                historyCardBorder.ScaleToAsync(1.0, 80, Easing.CubicIn),
+                historyCardBorder.FadeToAsync(1.0, 80, Easing.CubicIn)
+            );
+
+            if (_viewModel.OpenTransactionDetailsCommand.CanExecute(record))
+                _viewModel.OpenTransactionDetailsCommand.Execute(record);
+        }
+        finally
+        {
+            _isHistoryCardTapInProgress = false;
+        }
     }
 
     private async void ViewModel_PropertyChanged(object? sender, PropertyChangedEventArgs e)
@@ -48,7 +287,7 @@ public partial class HistoryPage : ContentPage
         _isAnimating = false;
     }
 
-    private void CloseTransactionSheetButton_Clicked(object sender, EventArgs e)
+    private void CloseTransactionSheetButton_Tapped(object sender, EventArgs e)
     {
         _viewModel.CloseTransactionSheetCommand.Execute(null);
     }
