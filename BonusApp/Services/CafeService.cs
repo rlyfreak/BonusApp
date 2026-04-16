@@ -6,24 +6,27 @@ namespace BonusApp.Services
     {
         private static readonly CafeService _instance = new CafeService();
         public static CafeService Instance => _instance;
-
-        private readonly List<Cafe> _cafes = new()
-        {
-            new Cafe { ID = 1, Name = "Калипсо" },
-            new Cafe { ID = 2, Name = "Розмарин" },
-            new Cafe { ID = 3, Name = "Винил" },
-            new Cafe { ID = 4, Name = "Редакция" },
-            new Cafe { ID = 5, Name = "Знак" },
-            new Cafe { ID = 6, Name = "Комод" }
-        };
         private CafeService() { }
         public List<Cafe> GetCafes()
         {
-            return _cafes.ToList();
+            return CafeCatalog.GetAll()
+                .Select(entry => new Cafe
+                {
+                    ID = entry.Id,
+                    Name = entry.Name
+                })
+                .ToList();
         }
         public Cafe? GetCafeById(int id)
         {
-            return _cafes.FirstOrDefault(x => x.ID == id);
+            var cafe = CafeCatalog.GetById(id);
+            return cafe == null
+                ? null
+                : new Cafe
+                {
+                    ID = cafe.Id,
+                    Name = cafe.Name
+                };
         }
     }
 }

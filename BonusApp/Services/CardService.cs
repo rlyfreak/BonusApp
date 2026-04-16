@@ -63,14 +63,18 @@ public class CardService
     }
     public bool HasCardForCafe(string cafeName)
     {
-        return _cards.Any(x => x.CafeName == cafeName);
+        return _cards.Any(x => string.Equals(x.CafeName, cafeName, StringComparison.Ordinal));
     }
     public LoyaltyCard? AddCard(string cafename)
     {
         if (HasCardForCafe(cafename))
             return null;
-        string prefix = GetPrefix(cafename);
-        string cardNumber = $"{prefix}-{_nextId:000000}";
+
+        var cafeInfo = CafeCatalog.GetByName(cafename);
+        if (cafeInfo == null)
+            return null;
+
+        string cardNumber = $"{cafeInfo.CardPrefix}-{_nextId:000000}";
 
         var newCard = new LoyaltyCard
         {
@@ -78,7 +82,7 @@ public class CardService
             CafeName = cafename,
             CardNumber = cardNumber,
             BonusBalance = 0,
-            QrCodeSource = GetQrCodeSource(cafename)
+            QrCodeSource = cafeInfo.QrCodeSource
         };
         _cards.Add(newCard);
         _notificationService.AddNotification(
@@ -86,33 +90,5 @@ public class CardService
             $"{cafename} добавлена в приложение.");
         _nextId++;
         return newCard;
-    }
-
-    private string GetQrCodeSource(string cafename)
-    {
-        return cafename switch
-        {
-            "Калипсо" => "qr_code_kalipso.svg",
-            "Розмарин" => "qr_code_rozmarin.svg",
-            "KoMod" => "qr_code_komod.svg",
-            "Винил" => "qr_code_vinyl.svg",
-            "Знак" => "qr_code_znak.svg",
-            "Редакция" => "qr_code_redac.svg",
-            _ => string.Empty
-        };
-    }
-
-    private string GetPrefix(string cafeName)
-    {
-        return cafeName switch
-        {
-            "Калипсо" => "KO",
-            "Розмарин" => "RN",
-            "Редакция" => "RA",
-            "Знак" => "ZK",
-            "Винил" => "VL",
-            "Комод" => "KD",
-            _ => "XX"
-        };
     }
 }

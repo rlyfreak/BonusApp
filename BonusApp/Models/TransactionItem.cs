@@ -4,6 +4,7 @@
     {
         public int Id { get; set; }
         public int CardId { get; set; }
+        public string CafeName { get; set; } = string.Empty;
         public string Type { get; set; } = string.Empty; // "Начисление" или "Списание"
         public decimal BonusAmount { get; set; }
         public DateTime Date { get; set; }

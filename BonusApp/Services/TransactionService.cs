@@ -1,18 +1,22 @@
-﻿using BonusApp.Models;
+using BonusApp.Models;
 
 namespace BonusApp.Services;
 
 public class TransactionService
 {
-    private readonly List<TransactionItem> _transactions = new()
-    {
+    private static readonly TransactionService _instance = new();
+    public static TransactionService Instance => _instance;
+
+    private readonly List<TransactionItem> _transactions =
+    [
         new TransactionItem
         {
             Id = 1,
             CardId = 1,
+            CafeName = "Калипсо",
             Type = "Начисление",
             BonusAmount = 50,
-            Date = DateTime.Now.AddHours(-2),
+            Date = CreateDemoDate(0, 10, 30),
             Description = "Покупка на 320 ₽",
             BalanceBefore = 290,
             BalanceAfter = 340,
@@ -24,9 +28,10 @@ public class TransactionService
         {
             Id = 2,
             CardId = 1,
+            CafeName = "Калипсо",
             Type = "Списание",
             BonusAmount = 20,
-            Date = DateTime.Now.AddHours(-5),
+            Date = CreateDemoDate(0, 7, 15),
             Description = "Списание бонусов",
             BalanceBefore = 122,
             BalanceAfter = 102,
@@ -38,9 +43,10 @@ public class TransactionService
         {
             Id = 3,
             CardId = 2,
+            CafeName = "Розмарин",
             Type = "Начисление",
             BonusAmount = 35,
-            Date = DateTime.Now.AddDays(-1).AddHours(-3),
+            Date = CreateDemoDate(-1, 18, 40),
             Description = "Покупка на 780 ₽",
             BalanceBefore = 115,
             BalanceAfter = 150,
@@ -52,13 +58,14 @@ public class TransactionService
         {
             Id = 4,
             CardId = 3,
+            CafeName = "Комод",
             Type = "Начисление",
             BonusAmount = 100,
-            Date = DateTime.Now.AddDays(-3),
+            Date = CreateDemoDate(-3, 14, 5),
             Description = "Оплата на 520 ₽",
             BalanceBefore = 0,
             BalanceAfter = 100,
-            VenueAddress = "Чайка, проспект Славы, 31",
+            VenueAddress = "Комод, Гражданский проспект, 59А",
             OperationCode = "8B5712C2847D",
             Comment = "Покупка в заведении"
         },
@@ -66,17 +73,27 @@ public class TransactionService
         {
             Id = 5,
             CardId = 3,
+            CafeName = "Комод",
             Type = "Списание",
             BonusAmount = 40,
-            Date = DateTime.Now.AddDays(-5),
+            Date = CreateDemoDate(-5, 12, 20),
             Description = "Списание бонусами",
             BalanceBefore = 90,
             BalanceAfter = 50,
-            VenueAddress = "Чайка, проспект Славы, 31",
+            VenueAddress = "Комод, Гражданский проспект, 59А",
             OperationCode = "8B5712C2847E",
             Comment = "Покупка в заведении"
         }
-    };
+    ];
+
+    private TransactionService()
+    {
+    }
+
+    private static DateTime CreateDemoDate(int dayOffset, int hour, int minute)
+    {
+        return DateTime.Today.AddDays(dayOffset).AddHours(hour).AddMinutes(minute);
+    }
 
     public List<TransactionItem> GetAllTransactions()
     {

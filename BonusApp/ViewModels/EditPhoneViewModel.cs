@@ -1,4 +1,5 @@
-﻿using BonusApp.Services;
+using BonusApp.Services;
+using System.Text.RegularExpressions;
 
 namespace BonusApp.ViewModels;
 
@@ -28,7 +29,12 @@ public class EditPhoneViewModel : BaseViewModel
         if (string.IsNullOrWhiteSpace(PhoneNumber))
             return false;
 
-        _profileService.UpdatePhoneNumber(PhoneNumber.Trim());
+        string normalizedPhone = Regex.Replace(PhoneNumber.Trim(), @"[\s\-\(\)]", string.Empty);
+
+        if (!Regex.IsMatch(normalizedPhone, @"^\+?\d{10,15}$"))
+            return false;
+
+        _profileService.UpdatePhoneNumber(normalizedPhone);
         return true;
     }
 }

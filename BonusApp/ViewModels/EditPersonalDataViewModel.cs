@@ -67,6 +67,23 @@ namespace BonusApp.ViewModels
                 return false;
             }
 
+            DateTime today = DateTime.Today;
+            if (birthDate > today)
+            {
+                return false;
+            }
+
+            int age = today.Year - birthDate.Year;
+            if (birthDate.Date > today.AddYears(-age))
+            {
+                age--;
+            }
+
+            if (age < 14 || age > 120)
+            {
+                return false;
+            }
+
             _profileService.UpdatePersonalData(
                 LastName.Trim(),
                 FirstName.Trim(),

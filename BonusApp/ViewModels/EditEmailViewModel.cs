@@ -1,4 +1,5 @@
-﻿using BonusApp.Services;
+using BonusApp.Services;
+using System.Net.Mail;
 
 namespace BonusApp.ViewModels;
 
@@ -28,7 +29,20 @@ public class EditEmailViewModel : BaseViewModel
         if (string.IsNullOrWhiteSpace(Email))
             return false;
 
-        _profileService.UpdateEmail(Email.Trim());
+        string normalizedEmail = Email.Trim();
+
+        try
+        {
+            var mailAddress = new MailAddress(normalizedEmail);
+            if (!string.Equals(mailAddress.Address, normalizedEmail, StringComparison.OrdinalIgnoreCase))
+                return false;
+        }
+        catch
+        {
+            return false;
+        }
+
+        _profileService.UpdateEmail(normalizedEmail);
         return true;
     }
 }

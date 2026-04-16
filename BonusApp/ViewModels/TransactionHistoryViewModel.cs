@@ -20,7 +20,7 @@ public class TransactionHistoryViewModel : BaseViewModel
 
     public TransactionHistoryViewModel()
     {
-        _transactionService = new TransactionService();
+        _transactionService = TransactionService.Instance;
         _cardService = CardService.Instance;
     }
 

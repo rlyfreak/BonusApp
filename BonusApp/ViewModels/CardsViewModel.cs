@@ -100,11 +100,11 @@ public class CardsViewModel : BaseViewModel
 
         if (!string.IsNullOrWhiteSpace(SearchText))
         {
-            string query = SearchText.Trim().ToLower();
+            string query = SearchText.Trim();
 
             filteredCards = filteredCards.Where(card =>
-                card.CafeName.ToLower().Contains(query) ||
-                card.CardNumber.ToLower().Contains(query));
+                card.CafeName.Contains(query, StringComparison.CurrentCultureIgnoreCase) ||
+                card.CardNumber.Contains(query, StringComparison.CurrentCultureIgnoreCase));
         }
 
         Cards.Clear();

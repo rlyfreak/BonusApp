@@ -8,7 +8,6 @@ namespace BonusApp.ViewModels;
 public class HistoryViewModel : BaseViewModel
 {
     private readonly TransactionService _transactionService;
-    private readonly CardService _cardService;
 
     private List<HistoryRecord> _allHistory = new();
 
@@ -119,8 +118,7 @@ public class HistoryViewModel : BaseViewModel
 
     public HistoryViewModel()
     {
-        _transactionService = new TransactionService();
-        _cardService = CardService.Instance;
+        _transactionService = TransactionService.Instance;
 
         ShowAllCommand = new Command(() => SelectedFilter = "All");
         ShowAccrualCommand = new Command(() => SelectedFilter = "Accrual");
@@ -149,7 +147,7 @@ public class HistoryViewModel : BaseViewModel
             {
                 Id = t.Id,
                 CardId = t.CardId,
-                CafeName = _cardService.GetCardById(t.CardId)?.CafeName ?? "Неизвестно",
+                CafeName = t.CafeName,
                 Type = t.Type,
                 BonusAmount = t.BonusAmount,
                 Date = t.Date,
@@ -177,11 +175,11 @@ public class HistoryViewModel : BaseViewModel
 
         if (!string.IsNullOrWhiteSpace(SearchText))
         {
-            string query = SearchText.Trim().ToLower();
+            string query = SearchText.Trim();
 
             filtered = filtered.Where(x =>
-                x.CafeName.ToLower().Contains(query) ||
-                x.Description.ToLower().Contains(query));
+                x.CafeName.Contains(query, StringComparison.CurrentCultureIgnoreCase) ||
+                x.Description.Contains(query, StringComparison.CurrentCultureIgnoreCase));
         }
 
         var grouped = filtered

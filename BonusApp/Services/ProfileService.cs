@@ -23,7 +23,15 @@ public class ProfileService
 
     public UserProfile GetProfile()
     {
-        return _profile;
+        return new UserProfile
+        {
+            LastName = _profile.LastName,
+            FirstName = _profile.FirstName,
+            MiddleName = _profile.MiddleName,
+            BirthDate = _profile.BirthDate,
+            PhoneNumber = _profile.PhoneNumber,
+            Email = _profile.Email
+        };
     }
     public void UpdateEmail(string email)
     {

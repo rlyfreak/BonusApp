@@ -147,8 +147,8 @@ public class CatalogViewModel : BaseViewModel
 
         if (!string.IsNullOrWhiteSpace(SearchText))
         {
-            string query = SearchText.Trim().ToLower();
-            filtered = filtered.Where(x => x.Name.ToLower().Contains(query));
+            string query = SearchText.Trim();
+            filtered = filtered.Where(x => x.Name.Contains(query, StringComparison.CurrentCultureIgnoreCase));
         }
 
         Items.Clear();
