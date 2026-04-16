@@ -4,8 +4,8 @@ namespace BonusApp.Services;
 
 internal static class DemoAccountDefaults
 {
-    private const string TestEmail = "rlyfreak000@gmail.com";
-    private const string TestPhone = "+79991234567";
+    private const string TestEmail = "demo@bonusapp.local";
+    private const string TestPhone = "+79990000000";
 
     public static bool IsCurrentSessionDemoAccount()
     {
