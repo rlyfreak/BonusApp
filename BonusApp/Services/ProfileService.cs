@@ -1,21 +1,13 @@
-﻿using BonusApp.Models;
+using BonusApp.Models;
 
 namespace BonusApp.Services;
 
 public class ProfileService
 {
-    private static readonly ProfileService _instance = new ProfileService();
+    private static readonly ProfileService _instance = new();
     public static ProfileService Instance => _instance;
 
-    private readonly UserProfile _profile = new()
-    {
-        LastName = "Бондаренко",
-        FirstName = "Дмитрий",
-        MiddleName = "Сергеевич",
-        BirthDate = new DateTime(2007, 9, 10),
-        PhoneNumber = "+79991234567",
-        Email = "rlyfreak000@gmail.com"
-    };
+    private readonly Dictionary<int, UserProfile> _profilesByUser = new();
 
     private ProfileService()
     {
@@ -23,31 +15,54 @@ public class ProfileService
 
     public UserProfile GetProfile()
     {
+        var profile = GetCurrentUserProfile();
+
         return new UserProfile
         {
-            LastName = _profile.LastName,
-            FirstName = _profile.FirstName,
-            MiddleName = _profile.MiddleName,
-            BirthDate = _profile.BirthDate,
-            PhoneNumber = _profile.PhoneNumber,
-            Email = _profile.Email
+            LastName = profile.LastName,
+            FirstName = profile.FirstName,
+            MiddleName = profile.MiddleName,
+            BirthDate = profile.BirthDate,
+            PhoneNumber = profile.PhoneNumber,
+            Email = profile.Email
         };
     }
+
     public void UpdateEmail(string email)
     {
-        _profile.Email = email;
+        GetCurrentUserProfile().Email = email;
     }
 
     public void UpdatePhoneNumber(string phoneNumber)
     {
-        _profile.PhoneNumber = phoneNumber;
+        GetCurrentUserProfile().PhoneNumber = phoneNumber;
     }
 
     public void UpdatePersonalData(string lastName, string firstName, string middleName, DateTime birthDate)
     {
-        _profile.LastName = lastName;
-        _profile.FirstName = firstName;
-        _profile.MiddleName = middleName;
-        _profile.BirthDate = birthDate;
+        var profile = GetCurrentUserProfile();
+        profile.LastName = lastName;
+        profile.FirstName = firstName;
+        profile.MiddleName = middleName;
+        profile.BirthDate = birthDate;
+    }
+
+    private UserProfile GetCurrentUserProfile()
+    {
+        int userId = SessionService.Instance.UserId;
+
+        if (_profilesByUser.TryGetValue(userId, out var profile))
+        {
+            profile.PhoneNumber = SessionService.Instance.PhoneNumber;
+            profile.Email = SessionService.Instance.Email;
+            return profile;
+        }
+
+        profile = DemoAccountDefaults.IsCurrentSessionDemoAccount()
+            ? DemoAccountDefaults.CreateProfile()
+            : DemoAccountDefaults.CreateEmptyProfile();
+
+        _profilesByUser[userId] = profile;
+        return profile;
     }
 }

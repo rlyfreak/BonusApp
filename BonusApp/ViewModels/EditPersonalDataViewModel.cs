@@ -41,7 +41,7 @@ namespace BonusApp.ViewModels
             LastName = profile.LastName;
             FirstName = profile.FirstName;
             MiddleName = profile.MiddleName;
-            BirthDateText = profile.BirthDate.ToString("dd.MM.yyyy");
+            BirthDateText = profile.BirthDate == default ? string.Empty : profile.BirthDate.ToString("dd.MM.yyyy");
         }
         public bool Save()
         {

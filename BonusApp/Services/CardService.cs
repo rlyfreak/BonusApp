@@ -1,94 +1,108 @@
-﻿using BonusApp.Models;
+using BonusApp.Models;
+
 namespace BonusApp.Services;
 
 public class CardService
 {
-    private static readonly CardService _instance = new CardService();
+    private static readonly CardService _instance = new();
     public static CardService Instance => _instance;
 
-    private readonly List<LoyaltyCard> _cards = new()
-    {
-     new LoyaltyCard
-     {
-         Id = 1,
-         CafeName = "Калипсо",
-         CardNumber = "KO-100001",
-         BonusBalance = 250,
-         QrCodeSource = "qr_code_kalipso.svg"
-     },
-     new LoyaltyCard
-     {
-         Id = 2,
-         CafeName = "Розмарин",
-         CardNumber = "RN-100002",
-         BonusBalance = 150,
-         QrCodeSource = "qr_code_rozmarin.svg"
-     },
-     new LoyaltyCard
-     {
-         Id = 3,
-         CafeName = "Комод",
-         CardNumber = "KD-100003",
-         BonusBalance = 50,
-         QrCodeSource = "qr_code_komod.svg"
-     }
-    };
-    private int _nextId = 4;
+    private readonly Dictionary<int, List<LoyaltyCard>> _cardsByUser = new();
+    private readonly Dictionary<int, int> _nextIdsByUser = new();
     private readonly NotificationService _notificationService;
+
     private CardService()
     {
         _notificationService = NotificationService.Instance;
     }
+
     public List<LoyaltyCard> GetCards()
     {
-        return _cards.ToList();
+        return GetCurrentUserCards().ToList();
     }
 
     public LoyaltyCard? GetCardById(int id)
     {
-        return _cards.FirstOrDefault(x => x.Id == id);
+        return GetCurrentUserCards().FirstOrDefault(x => x.Id == id);
     }
 
     public bool DeleteCard(int id)
     {
-        var card = _cards.FirstOrDefault(x => x.Id == id);
+        var cards = GetCurrentUserCards();
+        var card = cards.FirstOrDefault(x => x.Id == id);
         if (card == null)
+        {
             return false;
-        string cafename = card.CafeName;
-        _cards.Remove(card);
+        }
+
+        cards.Remove(card);
         _notificationService.AddNotification(
             "Карта удалена",
-            $"{cafename} удалена из приложения.");
+            $"{card.CafeName} удалена из приложения.");
+
         return true;
     }
+
     public bool HasCardForCafe(string cafeName)
     {
-        return _cards.Any(x => string.Equals(x.CafeName, cafeName, StringComparison.Ordinal));
+        return GetCurrentUserCards().Any(x => string.Equals(x.CafeName, cafeName, StringComparison.Ordinal));
     }
-    public LoyaltyCard? AddCard(string cafename)
+
+    public LoyaltyCard? AddCard(string cafeName)
     {
-        if (HasCardForCafe(cafename))
+        if (HasCardForCafe(cafeName))
+        {
             return null;
+        }
 
-        var cafeInfo = CafeCatalog.GetByName(cafename);
+        var cafeInfo = CafeCatalog.GetByName(cafeName);
         if (cafeInfo == null)
+        {
             return null;
+        }
 
-        string cardNumber = $"{cafeInfo.CardPrefix}-{_nextId:000000}";
+        int userId = GetCurrentUserId();
+        int nextId = _nextIdsByUser[userId];
+        string cardNumber = $"{cafeInfo.CardPrefix}-{nextId:000000}";
 
         var newCard = new LoyaltyCard
         {
-            Id = _nextId,
-            CafeName = cafename,
+            Id = nextId,
+            CafeName = cafeName,
             CardNumber = cardNumber,
             BonusBalance = 0,
             QrCodeSource = cafeInfo.QrCodeSource
         };
-        _cards.Add(newCard);
+
+        GetCurrentUserCards().Add(newCard);
         _notificationService.AddNotification(
             "Карта добавлена",
-            $"{cafename} добавлена в приложение.");
-        _nextId++;
+            $"{cafeName} добавлена в приложение.");
+
+        _nextIdsByUser[userId] = nextId + 1;
         return newCard;
+    }
+
+    private List<LoyaltyCard> GetCurrentUserCards()
+    {
+        int userId = GetCurrentUserId();
+
+        if (_cardsByUser.TryGetValue(userId, out var cards))
+        {
+            return cards;
+        }
+
+        cards = DemoAccountDefaults.IsCurrentSessionDemoAccount()
+            ? DemoAccountDefaults.CreateCards()
+            : [];
+
+        _cardsByUser[userId] = cards;
+        _nextIdsByUser[userId] = cards.Count == 0 ? 1 : cards.Max(x => x.Id) + 1;
+        return cards;
+    }
+
+    private static int GetCurrentUserId()
+    {
+        return SessionService.Instance.UserId;
     }
 }

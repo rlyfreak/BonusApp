@@ -1,78 +1,91 @@
-﻿using BonusApp.Models;
+using BonusApp.Models;
 
-namespace BonusApp.Services
+namespace BonusApp.Services;
+
+public class NotificationService
 {
-    public class NotificationService
+    private static readonly NotificationService _instance = new();
+    public static NotificationService Instance => _instance;
+
+    private readonly Dictionary<int, List<NotificationItem>> _notificationsByUser = new();
+    private readonly Dictionary<int, int> _nextIdsByUser = new();
+
+    private NotificationService()
     {
-        private static readonly NotificationService _instance = new NotificationService();
-        public static NotificationService Instance => _instance;
+    }
 
-        private readonly List<NotificationItem> _notifications = new();
-        private int _nextId = 1;
+    public List<NotificationItem> GetNotifications()
+    {
+        return GetCurrentUserNotifications()
+            .OrderByDescending(x => x.Date)
+            .ToList();
+    }
 
-        private NotificationService()
+    public void AddNotification(string title, string message)
+    {
+        string iconSource = ResolveIconSource(title, message);
+        AddNotification(title, message, iconSource, DateTime.Now);
+    }
+
+    public void AddNotification(string title, string message, string iconSource)
+    {
+        AddNotification(title, message, iconSource, DateTime.Now);
+    }
+
+    private void AddNotification(string title, string message, string iconSource, DateTime date)
+    {
+        int userId = GetCurrentUserId();
+        var notifications = GetCurrentUserNotifications();
+
+        var notification = new NotificationItem
         {
-            SeedPlaceholderNotifications();
-        }
+            Id = _nextIdsByUser[userId]++,
+            Title = title,
+            Message = message,
+            Date = date,
+            IconSource = iconSource
+        };
 
-        public List<NotificationItem> GetNotifications()
+        notifications.Add(notification);
+    }
+
+    private string ResolveIconSource(string title, string message)
+    {
+        string text = $"{title} {message}".ToLower();
+
+        if (text.Contains("добав") || text.Contains("создан") || text.Contains("создание"))
         {
-            return _notifications
-                .OrderByDescending(x => x.Date)
-                .ToList();
-        }
-
-        public void AddNotification(string title, string message)
-        {
-            string iconSource = ResolveIconSource(title, message);
-            AddNotification(title, message, iconSource, DateTime.Now);
-        }
-
-        public void AddNotification(string title, string message, string iconSource)
-        {
-            AddNotification(title, message, iconSource, DateTime.Now);
-        }
-
-        private void AddNotification(string title, string message, string iconSource, DateTime date)
-        {
-            var notification = new NotificationItem
-            {
-                Id = _nextId++,
-                Title = title,
-                Message = message,
-                Date = date,
-                IconSource = iconSource
-            };
-
-            _notifications.Add(notification);
-        }
-
-        private string ResolveIconSource(string title, string message)
-        {
-            string text = $"{title} {message}".ToLower();
-
-            if (text.Contains("добав") || text.Contains("создан") || text.Contains("создание"))
-                return "notification_add.svg";
-
-            if (text.Contains("удал"))
-                return "notification_remove.svg";
-
             return "notification_add.svg";
         }
 
-        private void SeedPlaceholderNotifications()
+        if (text.Contains("удал"))
         {
-            AddNotification(
-                "Карта удалена",
-                "Знак удалена из приложения",
-                "notification_remove.svg",
-                DateTime.Today.AddDays(-1).AddHours(19).AddMinutes(22));
-
-            AddNotification(
-                "Карта добавлена",
-                "Розмарин добавлена в приложение",
-                "notification_add.svg",
-                DateTime.Today.AddDays(-7).AddHours(14).AddMinutes(10));
+            return "notification_remove.svg";
         }
+
+        return "notification_add.svg";
+    }
+
+    private List<NotificationItem> GetCurrentUserNotifications()
+    {
+        int userId = GetCurrentUserId();
+
+        if (_notificationsByUser.TryGetValue(userId, out var notifications))
+        {
+            return notifications;
+        }
+
+        notifications = DemoAccountDefaults.IsCurrentSessionDemoAccount()
+            ? DemoAccountDefaults.CreateNotifications()
+            : [];
+
+        _notificationsByUser[userId] = notifications;
+        _nextIdsByUser[userId] = notifications.Count == 0 ? 1 : notifications.Max(x => x.Id) + 1;
+        return notifications;
+    }
+
+    private static int GetCurrentUserId()
+    {
+        return SessionService.Instance.UserId;
     }
 }
