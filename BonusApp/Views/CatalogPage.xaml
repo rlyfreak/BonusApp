@@ -18,149 +18,235 @@
 
     <Grid Background="{StaticResource ProfileBackgroundBrush}">
 
-        <!-- Основной контент -->
         <Grid Margin="0" RowDefinitions="Auto,Auto,*">
 
-            <!-- Заголовок -->
+            <!-- Шапка -->
             <Grid
+                x:Name="HeaderSlot"
                 Grid.Row="0"
-                Padding="20,18,20,12"
-                ColumnDefinitions="*">
+                IsClippedToBounds="True">
 
-                <Label
-                    Text="Каталог карт"
-                    FontSize="28"
-                    FontAttributes="Bold"
-                    TextColor="White"
-                    VerticalOptions="Center" />
+                <Grid
+                    x:Name="HeaderContainer"
+                    SizeChanged="HeaderContainer_SizeChanged"
+                    Padding="27,15,27,0">
+
+                    <Label
+                        Text="Каталог карт"
+                        FontFamily="RubikMedium"
+                        FontSize="36"
+                        TextColor="#F3F6F9"
+                        VerticalOptions="Center" />
+                </Grid>
             </Grid>
 
             <!-- Поиск -->
             <Border
                 Grid.Row="1"
-                Margin="20,0,20,12"
-                Padding="0"
-                Background="#2F3648"
+                Margin="27,10,27,0"
+                HeightRequest="51"
+                Background="#313645"
                 StrokeThickness="0"
-                StrokeShape="RoundRectangle 14">
+                StrokeShape="RoundRectangle 15">
 
-                <Grid ColumnDefinitions="Auto,*" Padding="14,8">
-                    <Label
-                        Text="⌕"
-                        FontSize="18"
-                        TextColor="#AEB6C9"
-                        VerticalOptions="Center" />
+                <Grid ColumnDefinitions="Auto,*" Padding="15,0">
+                    <Image
+                        Source="search.svg"
+                        WidthRequest="21"
+                        HeightRequest="21"
+                        HorizontalOptions="Center"
+                        VerticalOptions="Center"
+                        Aspect="AspectFit" />
 
                     <Entry
+                        x:Name="SearchEntry"
                         Grid.Column="1"
+                        Margin="10,0,0,0"
                         Text="{Binding SearchText}"
+                        TextChanged="SearchEntry_TextChanged"
+                        Focused="SearchEntry_Focused"
+                        Unfocused="SearchEntry_Unfocused"
                         Placeholder="Название заведения"
-                        PlaceholderColor="#AEB6C9"
-                        TextColor="White"
+                        PlaceholderColor="#99F3F6F9"
+                        TextColor="#F3F6F9"
                         BackgroundColor="Transparent"
-                        FontSize="15"
-                        Margin="10,0,0,0" />
+                        FontFamily="RubikMedium"
+                        FontSize="24"
+                        HeightRequest="100"
+                        VerticalOptions="Center"
+                        VerticalTextAlignment="Center"
+                        TranslationY="1" />
                 </Grid>
             </Border>
 
-            <!-- Список каталога -->
-            <Grid Grid.Row="2">
+            <!-- Список -->
+            <Grid
+                Grid.Row="2"
+                Margin="0,20,0,0">
 
                 <CollectionView
-                    Margin="20,0,20,0"
+                    x:Name="CatalogCollectionView"
+                    Margin="27,0,27,0"
                     ItemsSource="{Binding Items}"
                     IsVisible="{Binding HasItems}"
-                    SelectionMode="None">
+                    SelectionMode="None"
+                    BackgroundColor="Transparent"
+                    Scrolled="CatalogCollectionView_Scrolled">
 
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
                             <Border
-                                Margin="0,0,0,12"
-                                Padding="14"
+                                Margin="0,0,0,18"
+                                HeightRequest="165"
                                 Background="White"
-                                StrokeThickness="0"
-                                StrokeShape="RoundRectangle 18">
+                                Stroke="#80FFFFFF"
+                                StrokeThickness="1"
+                                StrokeShape="RoundRectangle 20">
 
-                                <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="12">
+                                <Border.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="CatalogCard_Tapped" />
+                                </Border.GestureRecognizers>
 
-                                    <!-- Логотип-заглушка -->
-                                    <Border
-                                        WidthRequest="58"
-                                        HeightRequest="58"
-                                        Background="#EEF2F8"
-                                        StrokeThickness="0"
-                                        StrokeShape="RoundRectangle 29"
-                                        VerticalOptions="Center">
+                                <Grid>
+                                    <Grid.Clip>
+                                        <RoundRectangleGeometry
+                                            Rect="0,0,358,165"
+                                            CornerRadius="20" />
+                                    </Grid.Clip>
 
-                                        <Label
-                                            Text="{Binding Name, StringFormat='{0:0}'}"
-                                            HorizontalOptions="Center"
-                                            VerticalOptions="Center"
-                                            FontSize="18"
-                                            FontAttributes="Bold"
-                                            TextColor="#4A536B" />
-                                    </Border>
-
-                                    <!-- Текст -->
-                                    <VerticalStackLayout
-                                        Grid.Column="1"
-                                        Spacing="4"
-                                        VerticalOptions="Center">
-
+                                    <!-- fallback -->
+                                    <Grid BackgroundColor="White">
                                         <Label
                                             Text="{Binding Name}"
-                                            FontSize="18"
-                                            FontAttributes="Bold"
-                                            TextColor="#1F2430"
-                                            LineBreakMode="TailTruncation" />
+                                            HorizontalOptions="Center"
+                                            VerticalOptions="Center"
+                                            FontFamily="RubikMedium"
+                                            FontSize="28"
+                                            TextColor="#2F3648" />
+                                    </Grid>
 
-                                        <Label
-                                            Text="Бонусная карта заведения"
-                                            FontSize="13"
-                                            TextColor="#6C7488" />
-                                    </VerticalStackLayout>
+                                    <!-- full card art -->
+                                    <Image
+                                        Aspect="AspectFill"
+                                        HorizontalOptions="Fill"
+                                        VerticalOptions="Fill"
+                                        IsVisible="False"
+                                        Scale="1.0">
+                                        <Image.Triggers>
+                                            <DataTrigger TargetType="Image" Binding="{Binding Name}" Value="Калипсо">
+                                                <Setter Property="IsVisible" Value="True" />
+                                                <Setter Property="Source" Value="kalipsologo.svg" />
+                                                <Setter Property="Scale" Value="1.0" />
+                                            </DataTrigger>
+                                            <DataTrigger TargetType="Image" Binding="{Binding Name}" Value="Комод">
+                                                <Setter Property="IsVisible" Value="True" />
+                                                <Setter Property="Source" Value="komodlogo.svg" />
+                                                <Setter Property="Scale" Value="1.0" />
+                                            </DataTrigger>
+                                            <DataTrigger TargetType="Image" Binding="{Binding Name}" Value="Винил">
+                                                <Setter Property="IsVisible" Value="True" />
+                                                <Setter Property="Source" Value="vinyllogo.svg" />
+                                                <Setter Property="Scale" Value="1.0" />
+                                            </DataTrigger>
+                                            <DataTrigger TargetType="Image" Binding="{Binding Name}" Value="Редакция">
+                                                <Setter Property="IsVisible" Value="True" />
+                                                <Setter Property="Source" Value="redaktsyalogo.svg" />
+                                                <Setter Property="Scale" Value="1.14" />
+                                            </DataTrigger>
+                                            <DataTrigger TargetType="Image" Binding="{Binding Name}" Value="Знак">
+                                                <Setter Property="IsVisible" Value="True" />
+                                                <Setter Property="Source" Value="znaklogo.svg" />
+                                                <Setter Property="Scale" Value="1.10" />
+                                            </DataTrigger>
+                                        </Image.Triggers>
+                                    </Image>
 
-                                    <!-- Кнопка -->
-                                    <Button
-                                        Grid.Column="2"
-                                        Text="Добавить"
-                                        Command="{Binding Source={x:Reference CatalogPageRoot}, Path=BindingContext.AddCardCommand}"
-                                        CommandParameter="{Binding .}"
-                                        BackgroundColor="#FFFFFF"
-                                        TextColor="#2F3648"
-                                        FontFamily="RubikMedium"
-                                        FontSize="13"
-                                        CornerRadius="12"
-                                        HeightRequest="36"
-                                        WidthRequest="96"
-                                        VerticalOptions="Center" />
+                                    <!-- розмарин -->
+                                    <Grid
+                                        BackgroundColor="White"
+                                        IsVisible="False">
+                                        <Grid.Triggers>
+                                            <DataTrigger TargetType="Grid" Binding="{Binding Name}" Value="Розмарин">
+                                                <Setter Property="IsVisible" Value="True" />
+                                            </DataTrigger>
+                                        </Grid.Triggers>
+
+                                        <Image
+                                            Source="rozmarinlogo.svg"
+                                            WidthRequest="64"
+                                            HeightRequest="76"
+                                            HorizontalOptions="Center"
+                                            VerticalOptions="Center"
+                                            Aspect="AspectFit" />
+                                    </Grid>
+
+                                    <!-- нижняя плашка -->
+                                    <Border
+                                        HeightRequest="58"
+                                        VerticalOptions="End"
+                                        Background="#E64C5263"
+                                        Stroke="#80FFFFFF"
+                                        StrokeThickness="1"
+                                        StrokeShape="RoundRectangle 0,0,20,20">
+
+                                        <Grid
+                                            Padding="14,10,14,10"
+                                            ColumnDefinitions="*,Auto">
+
+                                            <Label
+                                                Text="{Binding Name}"
+                                                FontFamily="RubikMedium"
+                                                FontSize="24"
+                                                TextColor="#F3F6F9"
+                                                VerticalOptions="Center" />
+
+                                            <Button
+                                                Grid.Column="1"
+                                                Text="Добавить"
+                                                WidthRequest="100"
+                                                HeightRequest="15"
+                                                Padding="0"
+                                                CornerRadius="15"
+                                                FontFamily="RubikMedium"
+                                                FontSize="16"
+                                                BackgroundColor="#F3F6F9"
+                                                TextColor="#4C5263"
+                                                HorizontalOptions="End"
+                                                VerticalOptions="Center" />
+                                        </Grid>
+                                    </Border>
                                 </Grid>
                             </Border>
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
+
+                    <CollectionView.Footer>
+                        <Grid HeightRequest="140" BackgroundColor="Transparent" />
+                    </CollectionView.Footer>
                 </CollectionView>
 
                 <!-- Пустое состояние -->
                 <VerticalStackLayout
-                    Margin="20,0,20,0"
+                    Margin="27,0,27,0"
                     IsVisible="{Binding IsEmpty}"
                     HorizontalOptions="Center"
                     VerticalOptions="Center"
                     Spacing="12">
 
                     <Label
-                        Text="Доступных карт не найдено"
+                        Text="Все карты уже добавлены"
+                        FontFamily="RubikMedium"
                         FontSize="22"
-                        FontAttributes="Bold"
-                        TextColor="White"
+                        TextColor="#F3F6F9"
                         HorizontalTextAlignment="Center" />
 
                     <Label
-                        Text="Возможно, все карты уже добавлены или поиск не дал результатов"
+                        Text="В каталоге не осталось доступных заведений для добавления"
+                        FontFamily="RubikRegular"
                         FontSize="14"
                         TextColor="#D7DDEA"
                         HorizontalTextAlignment="Center"
-                        MaximumWidthRequest="260" />
+                        MaximumWidthRequest="280" />
                 </VerticalStackLayout>
             </Grid>
         </Grid>
@@ -170,5 +256,226 @@
             Margin="16,0,16,12"
             VerticalOptions="End"
             CurrentTab="Catalog" />
+
+        <!-- Sheet добавления карты -->
+        <Grid
+            x:Name="AddCardSheetOverlay"
+            IsVisible="False"
+            BackgroundColor="#CF000000">
+
+            <Grid RowDefinitions="85,*">
+
+                <!-- Лист -->
+                <Border
+                    x:Name="AddCardSheetContainer"
+                    Grid.Row="1"
+                    Background="#4C5263"
+                    StrokeThickness="0"
+                    StrokeShape="RoundRectangle 29,29,0,0"
+                    Padding="27,25,27,24"
+                    TranslationY="1200">
+
+                    <ScrollView>
+                        <VerticalStackLayout Spacing="10">
+
+                            <!-- Карта -->
+                            <Border
+                                WidthRequest="358"
+                                HeightRequest="165"
+                                HorizontalOptions="Center"
+                                Background="White"
+                                StrokeThickness="0"
+                                StrokeShape="RoundRectangle 20">
+
+                                <Grid>
+                                    <Grid.Clip>
+                                        <RoundRectangleGeometry
+                                            Rect="0,0,358,165"
+                                            CornerRadius="20" />
+                                    </Grid.Clip>
+
+                                    <!-- fallback -->
+                                    <Grid BackgroundColor="White">
+                                        <Label
+                                            Text="{Binding SelectedItem.Name}"
+                                            HorizontalOptions="Center"
+                                            VerticalOptions="Center"
+                                            FontFamily="RubikMedium"
+                                            FontSize="28"
+                                            TextColor="#2F3648" />
+                                    </Grid>
+
+                                    <!-- full card art -->
+                                    <Image
+                                        Aspect="AspectFill"
+                                        HorizontalOptions="Fill"
+                                        VerticalOptions="Fill"
+                                        IsVisible="False"
+                                        Scale="1.0">
+                                        <Image.Triggers>
+                                            <DataTrigger TargetType="Image" Binding="{Binding SelectedItem.Name}" Value="Калипсо">
+                                                <Setter Property="IsVisible" Value="True" />
+                                                <Setter Property="Source" Value="kalipsologo.svg" />
+                                                <Setter Property="Scale" Value="1.0" />
+                                            </DataTrigger>
+                                            <DataTrigger TargetType="Image" Binding="{Binding SelectedItem.Name}" Value="Комод">
+                                                <Setter Property="IsVisible" Value="True" />
+                                                <Setter Property="Source" Value="komodlogo.svg" />
+                                                <Setter Property="Scale" Value="1.0" />
+                                            </DataTrigger>
+                                            <DataTrigger TargetType="Image" Binding="{Binding SelectedItem.Name}" Value="Винил">
+                                                <Setter Property="IsVisible" Value="True" />
+                                                <Setter Property="Source" Value="vinyllogo.svg" />
+                                                <Setter Property="Scale" Value="1.0" />
+                                            </DataTrigger>
+                                            <DataTrigger TargetType="Image" Binding="{Binding SelectedItem.Name}" Value="Редакция">
+                                                <Setter Property="IsVisible" Value="True" />
+                                                <Setter Property="Source" Value="redaktsyalogo.svg" />
+                                                <Setter Property="Scale" Value="1.14" />
+                                            </DataTrigger>
+                                            <DataTrigger TargetType="Image" Binding="{Binding SelectedItem.Name}" Value="Знак">
+                                                <Setter Property="IsVisible" Value="True" />
+                                                <Setter Property="Source" Value="znaklogo.svg" />
+                                                <Setter Property="Scale" Value="1.10" />
+                                            </DataTrigger>
+                                        </Image.Triggers>
+                                    </Image>
+
+                                    <!-- розмарин -->
+                                    <Grid
+                                        BackgroundColor="White"
+                                        IsVisible="False">
+                                        <Grid.Triggers>
+                                            <DataTrigger TargetType="Grid" Binding="{Binding SelectedItem.Name}" Value="Розмарин">
+                                                <Setter Property="IsVisible" Value="True" />
+                                            </DataTrigger>
+                                        </Grid.Triggers>
+
+                                        <Image
+                                            Source="rozmarinlogo.svg"
+                                            WidthRequest="64"
+                                            HeightRequest="76"
+                                            HorizontalOptions="Center"
+                                            VerticalOptions="Center"
+                                            Aspect="AspectFit" />
+                                    </Grid>
+                                </Grid>
+                            </Border>
+
+                            <VerticalStackLayout Spacing="0">
+                                <Label
+                                    Text="{Binding SelectedItem.Name}"
+                                    FontFamily="RubikMedium"
+                                    FontSize="36"
+                                    TextColor="#F3F6F9" />
+
+                                <Label
+                                    Text="Бонусная карта"
+                                    FontFamily="RubikRegular"
+                                    FontSize="20"
+                                    TextColor="#CCF3F6F9" />
+                            </VerticalStackLayout>
+
+                            <!-- Условия -->
+                            <Border
+                                WidthRequest="358"
+                                HeightRequest="92"
+                                HorizontalOptions="Center"
+                                Background="#303645"
+                                StrokeThickness="0"
+                                StrokeShape="RoundRectangle 15"
+                                Padding="20,10">
+
+                                <Label
+                                    Text="Для загрузки карты необходимо ваше согласие с правилами и условиями выпуска"
+                                    FontFamily="RubikRegular"
+                                    FontSize="20"
+                                    TextColor="#F3F6F9"
+                                    LineBreakMode="WordWrap" />
+                            </Border>
+
+                            <!-- Согласие -->
+                            <Grid
+                                WidthRequest="358"
+                                HorizontalOptions="Center"
+                                ColumnDefinitions="Auto,*"
+                                ColumnSpacing="10">
+
+                                <CheckBox
+                                    x:Name="AgreementCheckBox"
+                                    IsChecked="{Binding IsAgreementAccepted}"
+                                    VerticalOptions="Start"
+                                    Color="#F3F6F9">
+                                    <CheckBox.Triggers>
+                                        <DataTrigger TargetType="CheckBox" Binding="{Binding ShowAgreementError}" Value="True">
+                                            <Setter Property="Color" Value="#FF2A2A" />
+                                        </DataTrigger>
+                                    </CheckBox.Triggers>
+                                </CheckBox>
+
+                                <Label
+                                    Grid.Column="1"
+                                    Text="Я соглашаюсь с условиями обработки персональных данных и условиями выпуска карты"
+                                    FontFamily="RubikRegular"
+                                    FontSize="13"
+                                    TextColor="#F3F6F9"
+                                    LineBreakMode="WordWrap">
+                                    <Label.Triggers>
+                                        <DataTrigger TargetType="Label" Binding="{Binding ShowAgreementError}" Value="True">
+                                            <Setter Property="TextColor" Value="#FF2A2A" />
+                                        </DataTrigger>
+                                    </Label.Triggers>
+                                </Label>
+                            </Grid>
+
+                            <Label
+                                WidthRequest="358"
+                                HorizontalOptions="Center"
+                                Text="Ознакомиться с Политикой конфиденциальности можно по ссылке"
+                                FontFamily="RubikMedium"
+                                FontSize="14"
+                                TextColor="#F3F6F9"
+                                LineBreakMode="WordWrap" />
+
+                            <BoxView HeightRequest="90" Opacity="0" />
+
+                            <!-- Кнопки -->
+                            <Button
+                                Text="Добавить"
+                                Command="{Binding AddCardCommand}"
+                                WidthRequest="358"
+                                HeightRequest="39"
+                                HorizontalOptions="Center"
+                                FontFamily="RubikMedium"
+                                FontSize="16"
+                                CornerRadius="29"
+                                Padding="0"
+                                BackgroundColor="#F3F6F9"
+                                TextColor="#4C5263">
+                                <Button.Triggers>
+                                    <DataTrigger TargetType="Button" Binding="{Binding ShowAgreementError}" Value="True">
+                                        <Setter Property="BackgroundColor" Value="#FF1E1E" />
+                                        <Setter Property="TextColor" Value="#F3F6F9" />
+                                    </DataTrigger>
+                                </Button.Triggers>
+                            </Button>
+
+                            <Button
+                                Text="Отмена"
+                                Command="{Binding CloseAddCardSheetCommand}"
+                                WidthRequest="358"
+                                HeightRequest="39"
+                                HorizontalOptions="Center"
+                                FontFamily="RubikMedium"
+                                FontSize="16"
+                                CornerRadius="29"
+                                Padding="0"
+                                BackgroundColor="#303645"
+                                TextColor="#F3F6F9" />
+                        </VerticalStackLayout>
+                    </ScrollView>
+                </Border>
+            </Grid>
+        </Grid>
     </Grid>
 </ContentPage>
